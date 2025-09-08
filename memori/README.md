@@ -151,3 +151,5 @@ Notes:
 - Ghost mendukung subdirektori jika `url` diset ke `https://domain.tld/blog`; namun subdomain direkomendasikan.
 - Reverse proxy meneruskan `X-Forwarded-*` header; tidak perlu path rewrite tambahan.
 - Produksi: gunakan MySQL dan SMTP Oracle Cloud agar magic link berfungsi.
+  - SMTP Oracle Cloud: host `smtp.email.ap-batam-1.oci.oraclecloud.com`, port `587`, `secure=false`, `requireTLS=true`.
+  - Jika password SMTP mengandung karakter khusus (mis. `#`), gunakan tanda kutip di `.env`.
