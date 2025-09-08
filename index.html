@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Personal landing page for blogging and showcasing projects." />
+    <title>Your Name — Developer & Writer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#">Your Name</a>
+        <nav class="nav">
+          <a href="#blog">Blog</a>
+          <a href="#projects">Projects</a>
+          <a href="#about">About</a>
+          <a href="#contact" class="btn btn-small">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <h1>Developer, Writer, Lifelong Learner.</h1>
+          <p class="lead">
+            I build useful things on the web and write about
+            engineering, productivity, and what I learn along the way.
+          </p>
+          <div class="cta">
+            <a href="#blog" class="btn">Read the Blog</a>
+            <a href="#projects" class="btn btn-ghost">See Projects</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="blog" class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Latest Writing</h2>
+            <a href="#" class="see-all">View all posts →</a>
+          </div>
+          <div class="grid cards">
+            <article class="card">
+              <div class="card-body">
+                <h3><a href="#">Shipping Fast Without Breaking Things</a></h3>
+                <p class="muted">May 12, 2025 · 6 min read</p>
+                <p>
+                  Notes on lightweight processes, crisp scopes, and feedback loops
+                  that compound speed.
+                </p>
+                <div class="tags"><span>Process</span><span>Teams</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-body">
+                <h3><a href="#">From Idea to MVP: A 48‑Hour Playbook</a></h3>
+                <p class="muted">Apr 28, 2025 · 8 min read</p>
+                <p>
+                  A practical checklist to validate problems, slice scope, and
+                  ship something people can use.
+                </p>
+                <div class="tags"><span>Product</span><span>Startup</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-body">
+                <h3><a href="#">Pragmatic TypeScript: Patterns That Scale</a></h3>
+                <p class="muted">Apr 10, 2025 · 7 min read</p>
+                <p>
+                  Interfaces vs. types, narrowing, and a handful of patterns that
+                  keep codebases calm.
+                </p>
+                <div class="tags"><span>TypeScript</span><span>Architecture</span></div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" class="section alt">
+        <div class="container">
+          <div class="section-head">
+            <h2>Selected Projects</h2>
+            <a href="#" class="see-all">More on GitHub →</a>
+          </div>
+          <div class="grid cards">
+            <article class="card">
+              <div class="card-body">
+                <h3>Postlight</h3>
+                <p>
+                  A minimalist blogging engine with Markdown, tags, and RSS.
+                </p>
+                <p class="muted">Node · Express · SQLite</p>
+                <div class="links">
+                  <a href="#">Live</a>
+                  <a href="#">Repo</a>
+                </div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-body">
+                <h3>Snapfolio</h3>
+                <p>
+                  A zero‑config portfolio theme with fast image optimization.
+                </p>
+                <p class="muted">Astro · CSS</p>
+                <div class="links">
+                  <a href="#">Live</a>
+                  <a href="#">Repo</a>
+                </div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-body">
+                <h3>Chronicle</h3>
+                <p>
+                  Daily journaling CLI that syncs to a static site.
+                </p>
+                <p class="muted">Python · Markdown</p>
+                <div class="links">
+                  <a href="#">Docs</a>
+                  <a href="#">Repo</a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="section">
+        <div class="container about">
+          <div class="avatar" aria-hidden="true"></div>
+          <div>
+            <h2>About</h2>
+            <p>
+              I’m a software engineer focused on building clear, reliable
+              products. I enjoy developer experience, fast feedback loops, and
+              writing that teaches by doing.
+            </p>
+            <p>
+              When not coding, I’m likely reading, sketching new ideas, or
+              outside with coffee.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="section alt">
+        <div class="container">
+          <h2>Get in touch</h2>
+          <p class="lead">Have a project or a question? I’d love to hear from you.</p>
+          <div class="cta">
+            <a class="btn" href="mailto:you@example.com">Email me</a>
+            <a class="btn btn-ghost" href="#">LinkedIn</a>
+            <a class="btn btn-ghost" href="#">GitHub</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p class="muted">© <span id="year"></span> Your Name. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+  </html>
+

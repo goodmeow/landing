@@ -1,0 +1,35 @@
+# Ignore local TODOs and exports
+todo/
+
+# Ignore credentials/secrets under landing/
+# Common secret file patterns
+*.env
+*.env.local
+*.env.*.local
+*.secret
+*.secrets
+*.key
+*.pem
+*.p12
+*.crt
+*.pfx
+*.keystore
+*.jks
+
+# Specific paths inside this repo
+deploy/**/secrets*/
+deploy/**/certs*/
+deploy/**/keys*/
+deploy/**/.env
+deploy/**/.env.*
+
+# Docker/compose overrides and local configs
+docker-compose.override.yml
+deploy/docker-compose.override.yml
+
+# System/editor cruft
+.DS_Store
+*.swp
+*.swo
+*.log
+
