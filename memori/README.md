@@ -151,5 +151,94 @@ Notes:
 - Ghost mendukung subdirektori jika `url` diset ke `https://domain.tld/blog`; namun subdomain direkomendasikan.
 - Reverse proxy meneruskan `X-Forwarded-*` header; tidak perlu path rewrite tambahan.
 - Produksi: gunakan MySQL dan SMTP Oracle Cloud agar magic link berfungsi.
+
+### Email Delivery (Oracle Cloud) — DNS & SMTP
+- Provider: Oracle Email Delivery (region `ap-batam-1`).
+- SMTP endpoint: `smtp.email.ap-batam-1.oci.oraclecloud.com:587` (STARTTLS)
+  - Ghost env: `mail__transport=smtp`, `mail__options__secure=false`, `mail__options__requireTLS=true`.
+  - Username: SMTP credential dari OCI. Password: kutip jika ada karakter khusus.
+
+Konfigurasi DNS di Cloudflare (DNS only / bukan proxied):
+- DKIM CNAME (dari tab DKIM pada Email Domain):
+  - Type: `CNAME`
+  - Name: `<selector>._domainkey` (contoh: `aa-batam-202509._domainkey`)
+  - Target: `<selector>.goodmeow.my.id.dkim.<cluster>.oracleemaildelivery.com`
+
+- Custom Return Path (bounce domain):
+  - Type: `CNAME`
+  - Name: `return`
+  - Target: `hsg1.rp.oracleemaildelivery.com`
+
+- SPF untuk Return Path (agar “SPF Configured” menjadi Yes di OCI):
+  - Type: `TXT`
+  - Name: `return`
+  - Content: `v=spf1 include:_spf.email.ap-batam-1.oci.oraclecloud.com ~all`
+  - Catatan: pakai persis nilai “SPF Record Value” dari OCI jika berbeda.
+
+- (Opsional) SPF untuk root domain pengirim:
+  - Type: `TXT`
+  - Name: `@`
+  - Content: `v=spf1 include:_spf.email.ap-batam-1.oci.oraclecloud.com ~all`
+  - Jika sudah ada SPF lain, gabungkan menjadi satu baris (satu TXT saja di root).
+
+- DMARC (disarankan):
+  - Type: `TXT`
+  - Name: `_dmarc`
+  - Content (contoh): `v=DMARC1; p=quarantine; rua=mailto:dmarc@yourmail; pct=100`
+
+Verifikasi:
+- DNS: `dig +short CNAME return.goodmeow.my.id`, `dig +short TXT return.goodmeow.my.id`, `dig +short TXT goodmeow.my.id`.
+- OCI Console: status DKIM Active; Custom Return Path Active; “SPF Configured: Yes”.
+- Kirim test dari Ghost; cek header `Received-SPF` dan hasil di mail‑tester.com.
+
+## Log Pekerjaan — 2025‑09‑08
+
+Ringkasan perubahan besar hari ini:
+- Branding & konten: set identitas “goodmeow’s blog”, About, kontak, dan tautan sosial.
+- Ikon/OG: pakai Gravatar (hash Gmail) untuk favicon, Apple touch, OG/Twitter; avatar About pakai gambar Gravatar.
+- Lisensi: konten dilisensikan CC BY‑SA 4.0; badge di footer.
+- Versioning: footer menampilkan versi dari meta `x-build`; CI GitHub Action menulis otomatis dan bump `styles.css?v=...`. Script lokal tersedia `scripts/ci_build_version_local.sh`.
+- Keamanan: hardening Nginx (rate limit, limit_conn, method allowlist, headers `HSTS`, CSP, `Permissions-Policy`, `X-Robots-Tag noai,noimageai`), tambah blokir UA crawler AI; robots.txt disesuaikan.
+- Staging Ghost (opsi C):
+  - Subdomain `blog.goodmeow.my.id` via server block khusus; sub-path `/blog/` tetap tersedia.
+  - Compose: `deploy/docker-compose.blog.yml` berisi `blog` (Ghost) + `blog_db` (MySQL 8), volume `blog_content/` dan `blog_mysql/`.
+  - Env: `deploy/.env.blog` (git‑ignored) menyimpan `GHOST_PUBLIC_URL`, kredensial MySQL, dan SMTP Oracle ap‑batam‑1.
+  - CSP untuk host blog dilonggarkan agar Portal/Stripe berfungsi (`js.stripe.com`, `unpkg.com`), tetap ketat untuk yang lain.
+  - Nginx: izinkan `POST` pada `location /blog/` dan host blog agar API Ghost (signin/signup/webhook) berjalan.
+- Email Oracle (ap‑batam‑1):
+  - SMTP: `smtp.email.ap-batam-1.oci.oraclecloud.com:587`, `secure=false`, `requireTLS=true`.
+  - DNS: DKIM selector (CNAME), Return Path (CNAME), SPF TXT untuk `return`, opsional SPF di root `@`, dan DMARC.
+  - Sender: gunakan root domain — `no-reply@goodmeow.my.id`.
+
+Perbaikan signup (root cause dan tindakan):
+- Error 405 pada signup → karena method `POST` diblokir hardening. Solusi: izinkan `POST` di lokasi blog.
+- Error SMTP 535 “Envelope From not authorized” → karena Ghost mengirim `noreply@blog.goodmeow.my.id`.
+  - Solusi: set sender ke root domain di dua tempat:
+    - Env: `members__fromAddress=no-reply@goodmeow.my.id`.
+    - DB Ghost: `settings.members_from_address = 'no-reply@goodmeow.my.id'` dan newsletter `sender_email` di `newsletters`.
+- Error 429 (throttle) saat tes berulang → clear brute force table.
+
+Snippet operasional (troubleshooting cepat):
+- Tailing log Ghost selama 60 detik:
+  - `timeout 60s bash -lc 'docker logs -f --since=1s blog_ghost 2>&1'`
+- Reset throttle login (brute‑force):
+  - `docker exec -i blog_mysql mysql -uroot -e "USE ghost; TRUNCATE TABLE brute;"`
+- Paksa sender root domain di DB:
+  - `docker exec -i blog_mysql mysql -uroot -e "USE ghost; UPDATE settings SET value='no-reply@goodmeow.my.id' WHERE \`key\`='members_from_address'; UPDATE newsletters SET sender_email='no-reply@goodmeow.my.id', sender_name='goodmeow' WHERE sender_email IS NULL OR sender_email='';"`
+- Cek user/db MySQL dan buat jika perlu:
+  - `docker exec blog_mysql mysql -uroot -e "CREATE USER IF NOT EXISTS 'gmblog'@'%' IDENTIFIED BY '<strong-password>'; CREATE DATABASE IF NOT EXISTS ghost; GRANT ALL PRIVILEGES ON ghost.* TO 'gmblog'@'%'; FLUSH PRIVILEGES;"`
+- Recreate layanan staging:
+  - `docker compose -f deploy/docker-compose.yml -f deploy/docker-compose.blog.yml up -d --force-recreate`
+
+Catatan integrasi Cloudflare DNS (contoh):
+- DKIM: `aa-batam-202509._domainkey` → `aa-batam-202509.goodmeow.my.id.dkim.hsg1.oracleemaildelivery.com` (CNAME, DNS only).
+- Return Path: `return` → `hsg1.rp.oracleemaildelivery.com` (CNAME, DNS only).
+- SPF Return Path: TXT `return` → `v=spf1 include:_spf.email.ap-batam-1.oci.oraclecloud.com ~all`.
+- Opsional SPF root `@` → sertakan include Oracle agar DMARC align.
+
+Status akhir (staging blog):
+- `blog_mysql`: healthy; user `gmblog` dan DB `ghost` aktif.
+- `blog_ghost`: running; signup via magic link berhasil (HTTP 201), email terkirim.
+- Reverse proxy: CSP/headers + method POST sudah sesuai untuk Ghost.
   - SMTP Oracle Cloud: host `smtp.email.ap-batam-1.oci.oraclecloud.com`, port `587`, `secure=false`, `requireTLS=true`.
   - Jika password SMTP mengandung karakter khusus (mis. `#`), gunakan tanda kutip di `.env`.
