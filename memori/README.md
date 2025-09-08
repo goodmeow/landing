@@ -6,6 +6,10 @@ Ringkasan teknis proyek ini untuk referensi development dan deployment.
 - Tipe: situs landing page statik (HTML + CSS) dengan 404 page.
 - Hosting: Nginx dalam Docker; diproksi oleh Nginx reverse proxy ber‑TLS.
 - Fitur: SEO dasar (title/desc/OG/Twitter), sitemap, robots, web manifest (PWA meta minimal).
+- Branding: "goodmeow's blog" (About, kontak, LinkedIn, GitHub disesuaikan).
+- Avatar/ikon: memakai Gravatar (endpoint publik) untuk favicon, Apple touch icon, OG/Twitter image, dan avatar di About.
+- Lisensi konten: CC BY‑SA 4.0 (lihat `LICENSE.md`, badge di footer).
+- Versioning: footer menampilkan versi `YYYY.MM.DD+<shortSHA>` dari meta `x-build` (auto‑update via GitHub Actions).
 
 ## Struktur Direktori
 - `index.html` — halaman utama dan seluruh konten.
@@ -18,24 +22,26 @@ Ringkasan teknis proyek ini untuk referensi development dan deployment.
   - `deploy/nginx/goodmeow.conf` — contoh konfigurasi reverse proxy TLS untuk domain `goodmeow.my.id` yang mem‑proxy ke service `landing` di network `web`.
 
 ## Teknologi & Keputusan
-- **Front-end**: HTML5 semantik, CSS modern (var CSS, color-mix, grid responsif). Tidak ada JS build tool; hanya skrip kecil untuk tahun footer.
+- **Front-end**: HTML5 semantik, CSS modern (var CSS, color-mix, grid responsif). Tanpa build tool; JS ringan untuk set versi dan cache-busting CSS.
 - **SEO/Meta**: Open Graph + Twitter Card, `<link rel="canonical">`, `sitemap.xml`, `robots.txt`.
 - **PWA Meta**: `site.webmanifest` (name/short_name, theme/background, icons dasar).
+- **Avatar/Ikon**: Gravatar endpoint publik (hash MD5 email) digunakan di `<link rel="icon">`, `<link rel="apple-touch-icon">`, OG/Twitter, dan `.avatar` CSS (About). CSP mengizinkan `img-src` ke `https://www.gravatar.com`.
 - **Server**: Nginx statik dengan `try_files` dan custom `error_page 404`.
+- **Security/Hardening (reverse proxy)**: rate limit (10 r/s, burst 30), limit_conn per IP, blokir metode selain GET/HEAD/OPTIONS, header keamanan (`HSTS`, `X-CTO`, `CSP`, `Permissions-Policy`, `X-Robots-Tag: noai,noimageai`), dan pemblokiran UA crawler AI.
 - **Deploy**: Docker Compose; asumsi ada reverse proxy Nginx terpisah di jaringan `web` yang mengelola TLS (Cloudflare origin cert di contoh).
 
 ## Hal yang Perlu Disesuaikan (Branding/Konten)
-Edit nilai placeholder berikut agar sesuai identitas Anda:
+Edit nilai berikut agar sesuai identitas:
 - `index.html`
-  - `<title>`: "Your Name — Developer & Writer"
-  - `<meta name="description">`
-  - Open Graph/Twitter: `og:title`, `og:description`, `og:image`, `twitter:*`
-  - `<link rel="canonical" href="https://www.goodmeow.my.id/">` (ganti domain)
-  - JSON‑LD `WebSite` + `Person`: `name`, `url`
-  - Navigasi/CTA: email `mailto:you@example.com`, tautan GitHub/LinkedIn, teks hero, daftar tulisan/proyek.
+  - `<title>`, `<meta name="description">`, OG/Twitter (`og:title`, `og:description`, `twitter:*`).
+  - `<link rel="canonical" href="https://www.goodmeow.my.id/">` (ganti domain jika berubah).
+  - JSON‑LD `WebSite` + `Person`: `name`, `url`.
+  - Kontak: `mailto:aarunalr@pm.me`, LinkedIn, GitHub.
+  - Avatar/ikon: ganti GRAVATAR_HASH jika email berubah (lihat Catatan Gravatar).
 - `site.webmanifest`: `name`, `short_name`, warna tema, ikon jika perlu.
 - `sitemap.xml`: domain dan `lastmod` sesuai tanggal rilis.
 - `robots.txt`: URL sitemap ke domain final.
+- Footer: lisensi CC BY‑SA 4.0 dan versi akan terisi otomatis dari meta `x-build`.
 
 ## Alur Pengembangan Lokal
 Opsi 1 — server statik lokal cepat:
@@ -59,6 +65,7 @@ Langkah umum:
      - Menetapkan header keamanan dasar.
      - `proxy_pass http://landing:80;` dengan `Host`, `X-Forwarded-*` header.
      - Cache 7 hari untuk aset statik umum.
+     - Hardening: rate limit, UA block AI, CSP/Permissions‑Policy.
 4) Pasang sertifikat TLS (contoh menunjuk ke Cloudflare origin cert di `/etc/nginx/certs/...`).
 5) Reload Nginx reverse proxy.
 
@@ -70,21 +77,42 @@ Catatan volume di `deploy/docker-compose.yml`:
 ## Konvensi Kode
 - Simpel dan bebas dependensi: semua di `index.html` + `styles.css`.
 - CSS: gunakan variabel root dan utilitas yang sudah ada agar gaya konsisten.
-- Hindari JS berlebihan; jika perlu interaksi, pertahankan tanpa build tool.
+- JS: kecil & inline untuk set versi dan bump query string CSS berdasar meta `x-build`.
 
 ## Checklist Pra-Rilis
-- [ ] Ganti semua placeholder "Your Name" dan kontak.
-- [ ] Perbarui `og:image` ke gambar final (ukuran OG 1200x630 disarankan).
-- [ ] Perbarui `canonical`, `sitemap.xml`, dan `robots.txt` ke domain final.
-- [ ] Verifikasi aksesibilitas dasar (kontras, fokus, heading order).
-- [ ] Uji tampilan mobile dan desktop.
-- [ ] Audit performa (ukuran aset, cache headers dari reverse proxy).
-- [ ] Pastikan sertifikat TLS valid dan auto‑renewal (jika tidak via Cloudflare).
+- [ ] Branding & kontak sudah final.
+- [ ] OG/Twitter image memakai Gravatar atau gambar khusus.
+- [ ] `canonical`, `sitemap.xml`, dan `robots.txt` sesuai domain final.
+- [ ] Aksesibilitas dasar (kontras, fokus, heading).
+- [ ] Tampilan mobile dan desktop oke.
+- [ ] Performa (ukuran aset, cache headers reverse proxy).
+- [ ] TLS valid, auto‑renewal.
+- [ ] Hardening aktif (CSP, rate limit, UA blockers) dan tidak memblokir resource sah.
+- [ ] Lisensi tampak di footer + `LICENSE.md` ada.
+- [ ] Versi tampil di footer; meta `x-build` telah diupdate oleh CI.
 
 ## Pengujian Cepat
 - 404: akses URL yang tidak ada → harus memuat `404.html` via `error_page`.
 - Cache: periksa response header aset (`Cache-Control`, `expires`) lewat reverse proxy.
 - SEO: cek meta OG/Twitter di HTML source dan gunakan Debugger (FB/OG & Twitter/X validator).
+- Security: uji limit rate (dapat 429 jika spam), UA AI (403), dan CSP (resource eksternal hanya Gravatar).
+
+## Catatan Gravatar
+- Hash yang digunakan: MD5 dari email `harunbam3@gmail.com` (tidak mengekspos email).
+- Endpoint yang dipakai (contoh):
+  - Favicon: `https://www.gravatar.com/avatar/<hash>?s=32&d=identicon`
+  - Apple touch: `...s=180...`
+  - OG/Twitter: `...s=512...`
+  - Avatar About (CSS background): `...s=180...`
+- Jika ingin sepenuhnya tanpa ketergantungan eksternal, ambil Gravatar dan simpan lokal; perbarui CSP `img-src` bila perlu.
+
+## Versioning & CI
+- Versi tersimpan di meta `x-build` lalu ditampilkan di footer.
+- GitHub Actions `build-version.yml` otomatis:
+  - Menghitung versi `YYYY.MM.DD+<shortSHA>`.
+  - Mengupdate meta `x-build` di `index.html`.
+  - Meng‑set query string stylesheet `styles.css?v=<versi>` untuk cache‑busting.
+  - Commit kembali ke `main` jika ada perubahan.
 
 ## Ide Peningkatan
 - Tambah halaman blog/pos terpisah atau integrasi ke platform blog.

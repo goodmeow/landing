@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Experienced Data Analyst specializing in BI, forecasting, supply chain optimization, and operational risk mitigation. Certified in AWS Cloud, SCRUM, Tableau, and SQL." />
     <title>goodmeow's blog</title>
-    <link rel="stylesheet" href="styles.css?v=gravatar3" />
+    <link id="site-css" rel="stylesheet" href="styles.css" />
 
     <!-- Canonical & Theme -->
     <link rel="canonical" href="https://www.goodmeow.my.id/" />
@@ -166,11 +166,21 @@
 
     <meta name="x-build" content="2025.09.08+e36f689" />
     <script>
-      document.getElementById('year').textContent = new Date().getFullYear();
-      const meta = document.querySelector('meta[name="x-build"]');
-      if (meta) {
-        document.getElementById('version').textContent = meta.content;
-      }
+      (function(){
+        try {
+          var meta = document.querySelector('meta[name="x-build"]');
+          var v = meta ? meta.content : '';
+          var el = document.getElementById('version');
+          if (el && v) el.textContent = v;
+          var link = document.getElementById('site-css');
+          if (link && v) {
+            var href = link.getAttribute('href') || 'styles.css';
+            var u = new URL(href, window.location.href);
+            u.searchParams.set('v', v);
+            link.setAttribute('href', u.pathname + '?v=' + v);
+          }
+        } catch (e) {}
+      })();
     </script>
   </body>
   </html>

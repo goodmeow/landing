@@ -15,9 +15,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Compute version
-        run: echo "VERSION=$(date -u +'%Y.%m.%d')+$(git rev-parse --short=7 HEAD)" >> $GITHUB_ENV
+        shell: bash
+        run: |
+          echo "VERSION=$(date -u +'%Y.%m.%d')+${GITHUB_SHA::7}" >> "$GITHUB_ENV"
 
-      - name: Update x-build meta in index.html
+      - name: Update x-build meta and CSS version
         shell: bash
         run: |
           file=index.html
@@ -27,6 +29,8 @@ jobs:
             echo "Missing x-build meta tag in $file" >&2
             exit 1
           fi
+          # Ensure stylesheet uses ?v=${VERSION} for cache-busting
+          sed -i -E "s@(link id=\\\"site-css\\\"[^>]*href=\\\")styles\\.css(\?v=[^\\"]*)?\\"@\\1styles.css?v=${VERSION}\\"@" "$file"
 
       - name: Commit and push if changed
         shell: bash
@@ -40,4 +44,3 @@ jobs:
             git commit -m "chore(meta): update x-build to ${VERSION} [skip ci] [build-metadata]"
             git push
           fi
-
