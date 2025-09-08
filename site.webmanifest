@@ -1,6 +1,6 @@
 {
-  "name": "Your Name — Developer & Writer",
-  "short_name": "Your Name",
+  "name": "goodmeow's blog",
+  "short_name": "goodmeow",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0b0c10",
@@ -10,4 +10,3 @@
     { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
   ]
 }
-
