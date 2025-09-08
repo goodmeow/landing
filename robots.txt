@@ -1,5 +1,22 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.goodmeow.my.id/sitemap.xml
+# Block common AI crawlers (best-effort; not all will comply)
+User-agent: GPTBot
+Disallow: /
+User-agent: ChatGPT-User
+Disallow: /
+User-agent: Google-Extended
+Disallow: /
+User-agent: CCBot
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+User-agent: anthropic-ai
+Disallow: /
+User-agent: PerplexityBot
+Disallow: /
+User-agent: Bytespider
+Disallow: /
 
+Sitemap: https://www.goodmeow.my.id/sitemap.xml
