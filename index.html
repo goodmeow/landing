@@ -149,12 +149,17 @@
 
     <footer class="site-footer">
       <div class="container">
-        <p class="muted">© <span id="year"></span> Your Name. All rights reserved.</p>
+        <p class="muted">© <span id="year"></span> goodmeow · v<span id="version"></span></p>
       </div>
     </footer>
 
+    <meta name="x-build" content="2025.09.08+94aa089" />
     <script>
       document.getElementById('year').textContent = new Date().getFullYear();
+      const meta = document.querySelector('meta[name="x-build"]');
+      if (meta) {
+        document.getElementById('version').textContent = meta.content;
+      }
     </script>
   </body>
   </html>
