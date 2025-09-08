@@ -7,6 +7,8 @@ services:
     volumes:
       - ../index.html:/usr/share/nginx/html/index.html:ro
       - ../styles.css:/usr/share/nginx/html/styles.css:ro
+      - ../robots.txt:/usr/share/nginx/html/robots.txt:ro
+      - ../sitemap.xml:/usr/share/nginx/html/sitemap.xml:ro
     networks:
       web:
         aliases:

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.goodmeow.my.id/sitemap.xml
+
