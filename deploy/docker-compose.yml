@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  landing:
+    image: nginx:alpine
+    container_name: landing_www
+    restart: unless-stopped
+    volumes:
+      - ../index.html:/usr/share/nginx/html/index.html:ro
+      - ../styles.css:/usr/share/nginx/html/styles.css:ro
+    networks:
+      web:
+        aliases:
+          - landing
+      default: {}
+    expose:
+      - "80"
+
+networks:
+  web:
+    external: true
