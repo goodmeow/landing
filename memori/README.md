@@ -51,6 +51,10 @@ Opsi 2 — via Docker (Nginx):
 - Pastikan Docker jalan, lalu `docker compose -f deploy/docker-compose.yml up -d`.
 - Akses melalui container reverse proxy pada network `web` (lihat bagian Deploy). Jika tanpa reverse proxy, Anda bisa publish port sementara: `docker run --rm -p 8080:80 -v "$PWD":/usr/share/nginx/html:ro nginx:alpine` dan buka `http://localhost:8080`.
 
+Opsi 3 — uji lokal workflow versi (tanpa GitHub Actions):
+- Jalankan `DRY_RUN=1 scripts/ci_build_version_local.sh` untuk melihat diffs.
+- Jalankan `scripts/ci_build_version_local.sh` untuk menulis versi ke `index.html` dan bump `styles.css?v=<versi>`.
+
 ## Deploy
 Arsitektur: reverse proxy Nginx (TLS) → service `landing` (Nginx statik) di network Docker bernama `web`.
 
@@ -96,6 +100,13 @@ Catatan volume di `deploy/docker-compose.yml`:
 - Cache: periksa response header aset (`Cache-Control`, `expires`) lewat reverse proxy.
 - SEO: cek meta OG/Twitter di HTML source dan gunakan Debugger (FB/OG & Twitter/X validator).
 - Security: uji limit rate (dapat 429 jika spam), UA AI (403), dan CSP (resource eksternal hanya Gravatar).
+
+## Perapian Repo
+- Hapus bagian proyek (cards) dari landing; navigasi & CTA sudah disesuaikan.
+- Ganti favicon/OG/Apple touch ke Gravatar via endpoint publik; tetap dukung ikon lokal pada web manifest.
+- Footer memakai lisensi CC BY‑SA (badge) dan menampilkan versi build.
+- `.gitignore` menolak `.env*` dan `deploy/.env.*`; contoh `deploy/.env.blog.example` dipertahankan.
+- Script util lokal: `scripts/ci_build_version_local.sh` untuk meniru workflow versi.
 
 ## Catatan Gravatar
 - Hash yang digunakan: MD5 dari email `harunbam3@gmail.com` (tidak mengekspos email).
