@@ -133,16 +133,21 @@ Catatan volume di `deploy/docker-compose.yml`:
 
 ---
 Dokumen ini dimaksudkan sebagai memori proyek untuk membantu onboarding, development, dan operasional.
--## Staging: Opsi C (Ghost CMS) — cabang `staging/ghost-blog`
-- Struktur staging (cabang terpisah):
-- `deploy/docker-compose.blog.yml` — service `blog` (Ghost) dengan SQLite, `url` mengarah ke `/blog`.
-- `deploy/.env.blog` — konfigurasi mail (opsional) + `GHOST_PUBLIC_URL` jika domain berubah.
-- `deploy/nginx/goodmeow.conf` — tambah `location /blog/` → proxy ke `blog:2368/` (perhatikan trailing slash agar subpath benar).
+
+## Staging: Opsi C (Ghost CMS) — cabang `staging/ghost-blog`
+Struktur staging (cabang terpisah):
+- `deploy/docker-compose.blog.yml` — service `blog` (Ghost) + `blog_db` (MySQL 8). `url` default `https://blog.goodmeow.my.id`.
+- `deploy/.env.blog` — konfigurasi MySQL & SMTP Oracle Cloud + `GHOST_PUBLIC_URL` (override jika perlu).
+- `deploy/nginx/goodmeow.conf` — dua cara akses:
+  - Subdomain `blog.goodmeow.my.id` (server block khusus) → proxy ke `blog:2368/` (root).
+  - Subpath `/blog/` di domain utama tetap tersedia.
 - `blog_content/` — volume konten Ghost (commit `.gitkeep` kosong saja).
-- Jalankan staging lokal:
-  - `docker compose -f deploy/docker-compose.yml -f deploy/docker-compose.blog.yml up -d`
-  - Akses via reverse proxy: `https://www.goodmeow.my.id/blog` (atau host lokal jika diset).
-- Notes:
-  - Ghost mendukung subdirektori jika `url` diset ke `https://domain.tld/blog`.
-  - Reverse proxy sudah meneruskan `X-Forwarded-*` header; tidak perlu path rewrite tambahan.
-  - Untuk produksi, pertimbangkan MySQL dan SMTP (magic link). Untuk staging cukup SQLite.
+
+Jalankan staging lokal:
+- `docker compose -f deploy/docker-compose.yml -f deploy/docker-compose.blog.yml up -d`
+- Akses via reverse proxy: `https://blog.goodmeow.my.id/` (pastikan sertifikat subdomain), atau `https://www.goodmeow.my.id/blog`.
+
+Notes:
+- Ghost mendukung subdirektori jika `url` diset ke `https://domain.tld/blog`; namun subdomain direkomendasikan.
+- Reverse proxy meneruskan `X-Forwarded-*` header; tidak perlu path rewrite tambahan.
+- Produksi: gunakan MySQL dan SMTP Oracle Cloud agar magic link berfungsi.
