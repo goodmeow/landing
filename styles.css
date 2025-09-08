@@ -159,6 +159,15 @@ a { color: inherit; text-decoration: none; }
   padding: 28px 0 48px;
   border-top: 1px solid var(--border);
 }
+.license { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.license a { color: var(--text); text-decoration: underline; }
+.license-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 2px 8px; border-radius: 999px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel) 85%, var(--bg));
+  font-size: 12px; line-height: 1; color: var(--muted);
+}
 
 /* Utilities */
 h1, h2, h3 { font-weight: 800; }

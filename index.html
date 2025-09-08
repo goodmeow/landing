@@ -150,15 +150,21 @@
 
     <footer class="site-footer">
       <div class="container">
-        <p class="muted">
-          Content licensed under
-          <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license noopener noreferrer" target="_blank">CC BY‑SA 4.0</a>
+        <p class="muted license">
+          <a class="license-badge" href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license noopener noreferrer" target="_blank" aria-label="Content licensed under CC BY-SA 4.0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 110-16 8 8 0 010 16z"/>
+              <path d="M9.5 10.25a1.75 1.75 0 103.5 0 1.75 1.75 0 10-3.5 0zm5.5 0a1.75 1.75 0 103.5 0 1.75 1.75 0 10-3.5 0z"/>
+              <path d="M7 15.25c.9-1.2 2.5-2 5-2s4.1.8 5 2" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+            CC BY‑SA 4.0
+          </a>
           · v<span id="version"></span>
         </p>
       </div>
     </footer>
 
-    <meta name="x-build" content="2025.09.08+94aa089" />
+    <meta name="x-build" content="2025.09.08+e36f689" />
     <script>
       document.getElementById('year').textContent = new Date().getFullYear();
       const meta = document.querySelector('meta[name="x-build"]');
