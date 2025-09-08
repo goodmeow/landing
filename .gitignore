@@ -22,6 +22,7 @@ deploy/**/certs*/
 deploy/**/keys*/
 deploy/**/.env
 deploy/**/.env.*
+!deploy/.env.blog.example
 
 # Docker/compose overrides and local configs
 docker-compose.override.yml
@@ -32,4 +33,3 @@ deploy/docker-compose.override.yml
 *.swp
 *.swo
 *.log
-
