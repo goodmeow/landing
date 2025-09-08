@@ -133,3 +133,16 @@ Catatan volume di `deploy/docker-compose.yml`:
 
 ---
 Dokumen ini dimaksudkan sebagai memori proyek untuk membantu onboarding, development, dan operasional.
+-## Staging: Opsi C (Ghost CMS) — cabang `staging/ghost-blog`
+- Struktur staging (cabang terpisah):
+- `deploy/docker-compose.blog.yml` — service `blog` (Ghost) dengan SQLite, `url` mengarah ke `/blog`.
+- `deploy/.env.blog` — konfigurasi mail (opsional) + `GHOST_PUBLIC_URL` jika domain berubah.
+- `deploy/nginx/goodmeow.conf` — tambah `location /blog/` → proxy ke `blog:2368/` (perhatikan trailing slash agar subpath benar).
+- `blog_content/` — volume konten Ghost (commit `.gitkeep` kosong saja).
+- Jalankan staging lokal:
+  - `docker compose -f deploy/docker-compose.yml -f deploy/docker-compose.blog.yml up -d`
+  - Akses via reverse proxy: `https://www.goodmeow.my.id/blog` (atau host lokal jika diset).
+- Notes:
+  - Ghost mendukung subdirektori jika `url` diset ke `https://domain.tld/blog`.
+  - Reverse proxy sudah meneruskan `X-Forwarded-*` header; tidak perlu path rewrite tambahan.
+  - Untuk produksi, pertimbangkan MySQL dan SMTP (magic link). Untuk staging cukup SQLite.
