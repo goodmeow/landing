@@ -1,10 +1,13 @@
-# Web Versioning
+# Landing React Build
 
-- HTML head carries `<meta name="x-build" content="YYYY.MM.DD+shortSHA" />`.
-- Stylesheet link uses cache-busting query `styles.css?v=<version>` set from the same string.
-- GitHub Action `.github/workflows/build-version.yml` updates both values on every push to `main` by composing `$(date -u +'%Y.%m.%d')+${GITHUB_SHA::7}` and writing it back to `index.html`.
-- Local workflow: run `DRY_RUN=1 scripts/ci_build_version_local.sh` to preview, or `scripts/ci_build_version_local.sh` to apply.
+- Run `make frontend-version` to sync `<meta name="x-build">` with the current commit (or `make frontend-sync` to clean + build).
+- GitHub Action `.github/workflows/build-version.yml` calls the same script on pushes to `main`.
+- Output served from `frontend/dist/` by the Dockerised Nginx container.
 
-# License
+## Useful commands
+- `npm run dev` (inside `frontend/`) — Vite dev server.
+- `make frontend-preview` — preview production build on `0.0.0.0:4173`.
+- `docker compose -f deploy/docker-compose.yml up -d --force-recreate` — redeploy static container.
 
-- Content licensed under CC BY-SA 4.0; see `LICENSE.md` for details.
+## License
+- Content licensed under CC BY-SA 4.0 (`LICENSE.md`).

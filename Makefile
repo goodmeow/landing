@@ -1,15 +1,20 @@
-.PHONY: install latest-posts sitemap version sync
+FRONTEND_DIR := frontend
 
-install:
-	npm install
+.PHONY: frontend-install frontend-build frontend-preview frontend-clean frontend-sync frontend-version
 
-latest-posts:
-	npm run update:latest-posts
+frontend-install:
+	cd $(FRONTEND_DIR) && npm install
 
-sitemap:
-	npm run generate:sitemap
+frontend-build:
+	cd $(FRONTEND_DIR) && npm run build
 
-version:
-	scripts/ci_build_version_local.sh
+frontend-preview:
+	cd $(FRONTEND_DIR) && npm run preview -- --host 0.0.0.0 --port 4173
 
-sync: install latest-posts sitemap version
+frontend-clean:
+	rm -rf $(FRONTEND_DIR)/dist
+
+frontend-version:
+	NODE_ENV=production node scripts/update_build_meta.js
+
+frontend-sync: frontend-install frontend-clean frontend-version frontend-build
