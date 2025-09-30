@@ -16,7 +16,8 @@ Ringkasan teknis proyek ini untuk referensi development dan deployment.
 - `index.html` — halaman utama dan seluruh konten.
 - `styles.css` — gaya global untuk tema gelap/terang, komponen kartu, tombol, dll.
 - `404.html` — halaman error kustom.
-- `robots.txt`, `sitemap.xml`, `site.webmanifest`, ikon — aset SEO/PWA.
+- `robots.txt`, `sitemap.xml`, `site.webmanifest` — aset SEO/PWA.
+- `assets/` — ikon statik (`favicon.svg`, `favicon-32x32.png`, `apple-touch-icon.png`).
 - `deploy/` — konfigurasi Docker Compose dan Nginx.
   - `deploy/docker-compose.yml` — service `landing` (nginx:alpine), mount file statik, expose 80 ke network Docker `web` (eksternal).
   - `deploy/nginx/site.conf` — Nginx untuk menyajikan file statik + custom 404.
@@ -48,6 +49,7 @@ Edit nilai berikut agar sesuai identitas:
 - Footer: lisensi CC BY‑SA 4.0 dan versi akan terisi otomatis dari meta `x-build`.
 - `index.html` (Latest Writing): blok `<!-- latest-posts:start --> ... <!-- latest-posts:end -->` diupdate dari RSS; jalankan skrip bila ada rilis baru.
 - `sitemap.config.json`: tambahkan entri jika ada halaman baru; sitemap akan di-generate otomatis.
+- `assets/`: simpan ikon statik (`favicon.svg`, `favicon-32x32.png`, `apple-touch-icon.png`); pastikan manifest & 404 mengarah ke path baru.
 
 ## Alur Pengembangan Lokal
 Opsi 1 — server statik lokal cepat:
