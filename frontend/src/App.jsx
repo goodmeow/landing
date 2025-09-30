@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { Button, Card, CardBody, CardHeader, Chip, Divider } from '@heroui/react'
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 
-const latestPosts = [
+import latestPosts from './data/latestPosts.json'
+
+const fallbackPosts = [
   {
     title: 'Coming soon',
     url: 'https://blog.goodmeow.my.id/coming-soon/',
@@ -84,6 +86,7 @@ function App() {
   const version = useBuildVersion()
   const [{ theme, manual }, setThemeState] = useState(resolvePreferredTheme)
   const nextTheme = theme === 'light' ? 'dark' : 'light'
+  const blogPosts = Array.isArray(latestPosts) && latestPosts.length ? latestPosts : fallbackPosts
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -181,7 +184,7 @@ function App() {
               </a>
             </div>
             <div className="grid cards">
-              {latestPosts.map((post) => (
+              {blogPosts.map((post) => (
                 <Card key={post.url} as="article" className="blog-card" radius="lg" shadow="sm" isPressable>
                   <CardBody className="blog-card-body">
                     <h3>
@@ -189,7 +192,9 @@ function App() {
                         {post.title}
                       </a>
                     </h3>
-                    <p className="muted">{post.date}</p>
+                    <p className="muted">
+                      <time dateTime={post.isoDate ?? post.date}>{post.date}</time>
+                    </p>
                     <p>{post.description}</p>
                     <div className="tags">
                       {post.tags.map((tag) => (

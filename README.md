@@ -6,8 +6,10 @@
 
 ## Useful commands
 - `npm run dev` (inside `frontend/`) — Vite dev server.
+- `npm run sync:posts` (inside `frontend/`) — refresh `src/data/latestPosts.json` from the blog RSS feed (runs automatically before `npm run build`).
 - `make frontend-preview` — preview production build on `0.0.0.0:4173`.
 - `docker compose -f deploy/docker-compose.yml up -d --force-recreate` — redeploy static container.
+- Daily GitHub Action (`sync-latest-posts.yml`) re-syncs `latestPosts.json` at 03:00 UTC; trigger manually via the Actions tab if needed.
 
 ## License
 - Content licensed under CC BY-SA 4.0 (`LICENSE.md`).
