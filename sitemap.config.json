@@ -1,0 +1,10 @@
+{
+  "siteUrl": "https://www.goodmeow.my.id",
+  "urls": [
+    {
+      "loc": "/",
+      "changefreq": "weekly",
+      "priority": 1
+    }
+  ]
+}

@@ -5,6 +5,7 @@
   "description": "Utilities for maintaining the goodmeow landing page.",
   "license": "UNLICENSED",
   "scripts": {
+    "generate:sitemap": "node scripts/generate_sitemap.js",
     "update:latest-posts": "node scripts/update_latest_posts.js"
   },
   "dependencies": {
