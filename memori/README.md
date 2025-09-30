@@ -1,49 +1,46 @@
 # Memori Proyek — Landing Page (React/Tailwind)
 
-Ringkasan teknis proyek ini untuk referensi development dan deployment.
+Ringkasan singkat untuk pengembangan dan deployment.
 
 ## Ringkasan
-- Front-end sekarang React + Vite (Tailwind CSS 4 + HeroUI) dengan output statik di `frontend/dist/`.
-- Backend: Nginx container (Docker) yang menyajikan build statik; diproksi oleh Nginx reverse proxy TLS (Cloudflare).
-- Fitur: SEO dasar (OG/Twitter, canonical, sitemap, robots), web manifest, versi footer (`x-build`).
-- Branding: "goodmeow's blog" (About, kontak, LinkedIn, GitHub).
-- Ikon: Gravatar (hash publik) untuk favicon, Apple touch, OG/Twitter, avatar.
-- Lisensi konten: CC BY-SA 4.0 (`LICENSE.md`, badge footer).
+- Front-end: React + Vite + Tailwind CSS 4, komponen HeroUI.
+- Build statik disajikan via Nginx (Docker) di belakang reverse proxy TLS/Cloudflare.
+- SEO dasar: meta OG/Twitter, canonical, sitemap statik, robots, web manifest.
+- Branding: "goodmeow's blog" + ikon Gravatar.
+- Versi halaman ditampilkan lewat meta `x-build` (format `YYYY.MM.DD+<shortSHA>`).
 
-## Struktur Direktori
-- `frontend/` — aplikasi React utama.
-  - `src/` — komponen React + Tailwind (`styles.css`).
-  - `tailwind.config.js` — konfigurasi Tailwind + plugin HeroUI.
-  - `vite.config.js` — Vite + plugin Tailwind.
-  - `dist/` — hasil build (dipakai Nginx).
-- `index.html` (legacy) + `styles.css` — file statik lama (tetap ada untuk kompatibilitas tooling).
-- `assets/` — ikon lokal.
-- `deploy/` — Compose & Nginx konfigurasi.
-- `scripts/` — util Node (update RSS, sitemap, x-build).
-- `memori/` — dokumentasi proyek ini.
+## Struktur Direktori Penting
+- `frontend/`
+  - `src/` — komponen React, styling Tailwind (`styles.css`).
+  - `tailwind.config.js` — plugin Tailwind + HeroUI.
+  - `vite.config.js` — konfigurasi build.
+  - `dist/` — output produksi (dipakai Nginx).
+- `deploy/` — `docker-compose.yml` + konfigurasi Nginx.
+- `scripts/update_build_meta.js` — update meta `x-build` berdasarkan commit.
+- `memori/` — dokumentasi proyek (file ini).
+- `robots.txt`, `sitemap.xml`, `site.webmanifest` — aset SEO/PWA statik.
 
-## Build & Deploy Workflow
-- `make frontend-version` → jalankan `node scripts/update_build_meta.js` (set meta `x-build` berdasarkan tanggal + SHA HEAD).
-- `make frontend-build` → `npm run build` (Vite).
-- `make frontend-sync` → install dep, clean `dist`, update versi, build.
-- Deploy: `docker compose -f deploy/docker-compose.yml up -d --force-recreate` (menyajikan `frontend/dist`).
-- GitHub Action `.github/workflows/build-version.yml` menjalankan script versi + sitemap saat push ke `main`.
+## Workflow Build & Deploy
+- `make frontend-version` → jalankan script versi (`node scripts/update_build_meta.js`).
+- `make frontend-build` → build produksi (`npm run build`).
+- `make frontend-sync` → install dep, bersihkan `dist`, update versi, build.
+- `make frontend-preview` → preview di `0.0.0.0:4173`.
+- Deploy container: `docker compose -f deploy/docker-compose.yml up -d --force-recreate`.
+- GitHub Action `.github/workflows/build-version.yml` menjalankan script versi (tidak lagi generate sitemap) dan commit perubahan jika ada.
 
 ## Checklist Pra-Rilis
-- [ ] `frontend/src/App.jsx` konten (hero/blog/about/contact) sesuai branding terbaru.
-- [ ] Meta (title/description/OG/Twitter) di `frontend/index.html` sudah sesuai domain.
-- [ ] `scripts/update_build_meta.js` atau `make frontend-sync` dijalankan sebelum commit/push sehingga `x-build` mencerminkan HEAD.
-- [ ] Build React (`npm run build`) dan redeploy Nginx.
-- [ ] Periksa SEO/aksesibilitas/performa sesuai kebutuhan.
+- [ ] Konten di `frontend/src/App.jsx` sudah sesuai (hero/blog/about/contact).
+- [ ] Meta SEO di `frontend/index.html` benar (title, description, OG/Twitter, JSON-LD).
+- [ ] `make frontend-version` atau `make frontend-sync` dijalankan sebelum commit/push.
+- [ ] Build React sukses dan container Nginx di-redeploy.
+- [ ] Review performa/aksesibilitas/SEO sesuai kebutuhan.
 
 ## Pengujian Cepat
-- `npm run dev` (Vite) → manual QA.
-- `npm run build && npm run preview` atau `make frontend-preview` → cek build produksi.
-- `docker compose ... up -d` → refresh container; `curl` melalui proxy (ingat Cloudflare bisa challenge curl).
+- `npm run dev` (Vite) untuk QA.
+- `npm run build && npm run preview` atau `make frontend-preview` untuk cek build produksi.
+- `docker compose ... up -d` dan akses melalui reverse proxy (ingat Cloudflare bisa memblokir curl).
 
 ## Catatan
-- `scripts/update_latest_posts.js`, `scripts/generate_sitemap.js` tetap tersedia bila ingin sinkron RSS + sitemap (tidak otomatis).
-- `scripts/update_build_meta.js` dapat dioverride versi manual via `VERSION=...` apabila butuh.
-- Legacy HTML/CSS lama tetap ada sampai 100% migrasi React selesai; jangan dihapus sebelum memutus dependency.
-- Cloudflare Bot Fight Mode/WAF masih bisa memblokir curl; whitelist IP/UA jika perlu.
-
+- Sitemap + konten blog kini dikelola manual; skrip lama telah dihapus.
+- `scripts/update_build_meta.js` bisa dioverride dengan `VERSION=... node scripts/update_build_meta.js` bila perlu.
+- Cloudflare Bot Fight Mode/WAF masih bisa memblokir curl; whitelist IP/UA jika diperlukan.
