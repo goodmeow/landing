@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@heroui/react'
 
 const latestPosts = [
@@ -27,6 +27,16 @@ function useBuildVersion() {
 
 function App() {
   const version = useBuildVersion()
+  const commitInfo = useMemo(() => {
+    if (!version) return null
+    const parts = version.split('+')
+    const sha = parts[1]
+    if (!sha) return null
+    return {
+      sha,
+      url: `https://github.com/goodmeow/landing/commit/${sha}`,
+    }
+  }, [version])
 
   return (
     <>
@@ -153,7 +163,19 @@ function App() {
               </svg>
               CC BY‑SA 4.0
             </a>
-            · v<span>{version}</span>
+            · v
+            {commitInfo ? (
+              <a
+                href={commitInfo.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`View commit ${commitInfo.sha} on GitHub`}
+              >
+                {version}
+              </a>
+            ) : (
+              <span>{version}</span>
+            )}
           </p>
         </div>
       </footer>

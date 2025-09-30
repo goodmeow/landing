@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Experienced Data Analyst specializing in BI, forecasting, supply chain optimization, and operational risk mitigation. Certified in AWS Cloud, SCRUM, Tableau, and SQL." />
     <title>goodmeow's blog</title>
-    <link id="site-css" rel="stylesheet" href="styles.css?v=2025.09.30+1634843" />
+    <link id="site-css" rel="stylesheet" href="styles.css?v=2025.09.30+26aa1b8" />
 
     <!-- Canonical & Theme -->
     <link rel="canonical" href="https://www.goodmeow.my.id/" />
@@ -135,19 +135,35 @@
             </svg>
             CC BY‑SA 4.0
           </a>
-          · v<span id="version"></span>
+          · v<a id="version" class="version-link" rel="noopener noreferrer" target="_blank"></a>
         </p>
       </div>
     </footer>
 
-    <meta name="x-build" content="2025.09.30+1634843" />
+    <meta name="x-build" content="2025.09.30+26aa1b8" />
     <script>
       (function(){
         try {
           var meta = document.querySelector('meta[name="x-build"]');
           var v = meta ? meta.content : '';
           var el = document.getElementById('version');
-          if (el && v) el.textContent = v;
+          if (el) {
+            if (v) {
+              el.textContent = v;
+              var shaPart = v.split('+')[1];
+              if (shaPart) {
+                el.setAttribute('href', 'https://github.com/goodmeow/landing/commit/' + shaPart);
+                el.setAttribute('aria-label', 'View commit ' + shaPart + ' on GitHub');
+              } else {
+                el.removeAttribute('href');
+                el.removeAttribute('aria-label');
+              }
+            } else {
+              el.textContent = '';
+              el.removeAttribute('href');
+              el.removeAttribute('aria-label');
+            }
+          }
           var link = document.getElementById('site-css');
           if (link && v) {
             var href = link.getAttribute('href') || 'styles.css';
