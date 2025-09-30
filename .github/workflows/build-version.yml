@@ -18,19 +18,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
 
       - name: Compute version
         shell: bash
         run: |
           echo "VERSION=$(date -u +'%Y.%m.%d')+${GITHUB_SHA::7}" >> "$GITHUB_ENV"
-      - name: Update sitemap and x-build meta
-        run: |
-          npm run generate:sitemap
-          node scripts/update_build_meta.js
+      - name: Update x-build meta
+        run: node scripts/update_build_meta.js
 
       - name: Commit and push if changed
         shell: bash
@@ -40,7 +34,7 @@ jobs:
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add index.html frontend/index.html sitemap.xml
+            git add frontend/index.html
             git commit -m "chore(meta): update x-build to ${VERSION} [skip ci] [build-metadata]"
             git push
           fi

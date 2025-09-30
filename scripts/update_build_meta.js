@@ -26,13 +26,7 @@ function updateFile(filePath, version) {
     throw new Error(`Missing x-build meta tag in ${filePath}`);
   }
 
-  let updated = original.replace(metaRegex, `$1${version}$3`);
-
-  // Optional: legacy stylesheet cache busting if present
-  const cssRegex = /(link\s+id="site-css"[^>]*href=")styles\.css(?:\?v=[^"]*)?"/i;
-  if (cssRegex.test(updated)) {
-    updated = updated.replace(cssRegex, `$1styles.css?v=${version}"`);
-  }
+  const updated = original.replace(metaRegex, `$1${version}$3`);
 
   if (updated !== original) {
     fs.writeFileSync(filePath, updated);
@@ -48,10 +42,7 @@ function run() {
   try {
     const version = getVersion();
     const repoRoot = path.resolve(__dirname, '..');
-    const targets = [
-      path.join(repoRoot, 'frontend', 'index.html'),
-      path.join(repoRoot, 'index.html'),
-    ];
+    const targets = [path.join(repoRoot, 'frontend', 'index.html')];
 
     let changed = false;
     for (const target of targets) {
