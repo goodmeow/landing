@@ -33,3 +33,15 @@ deploy/docker-compose.override.yml
 *.swp
 *.swo
 *.log
+
+# Archive and staging runtime data
+archive/
+blog_content/
+blog_mysql/
+
+# Local env for blog staging (kept out of VCS)
+deploy/.env.blog
+
+# Local agent notes
+Agent.md
+deploy/ghost-smtp-backup.md
