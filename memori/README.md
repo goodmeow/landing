@@ -13,8 +13,9 @@ Ringkasan teknis proyek ini untuk referensi development dan deployment.
   - Seksi "Latest Writing" otomatis diisi ulang dari RSS Ghost (lihat bagian "Integrasi RSS").
 
 ## Struktur Direktori
-- `index.html` — halaman utama dan seluruh konten.
-- `styles.css` — gaya global untuk tema gelap/terang, komponen kartu, tombol, dll.
+- `index.html` — halaman statik legacy (dipertahankan untuk kompatibilitas tooling lama).
+- `frontend/` — aplikasi React + Vite (Tailwind CSS 4 + HeroUI) yang dibuild ke `frontend/dist/` dan disajikan Nginx.
+- `styles.css` — stylesheet legacy (tidak lagi dipakai setelah migrasi React, tetap disimpan selama masa transisi).
 - `404.html` — halaman error kustom.
 - `robots.txt`, `sitemap.xml`, `site.webmanifest` — aset SEO/PWA.
 - `assets/` — ikon statik (`favicon.svg`, `favicon-32x32.png`, `apple-touch-icon.png`).
@@ -26,8 +27,8 @@ Ringkasan teknis proyek ini untuk referensi development dan deployment.
 - `scripts/update_latest_posts.js` — skrip Node yang menarik RSS Ghost dan menulis ulang kartu konten terbaru.
 - `sitemap.config.json`, `scripts/generate_sitemap.js` — konfigurasi URL dan generator sitemap statik.
 - `scripts/lib/` — modul Node berorientasi objek untuk pembaruan konten (LatestPostsUpdater, SitemapGenerator).
-- `scripts/update_build_meta.js` — menyamakan meta `x-build` dengan HEAD (digunakan Makefile & GitHub Actions).
-- `frontend/` — proyek React (Vite) yang kini memakai Tailwind CSS 4 + HeroUI sebagai basis UI modern.
+- `scripts/update_build_meta.js` — menyamakan meta `x-build` dengan HEAD (dipanggil Makefile & GitHub Actions).
+- `Makefile` — target `frontend-*` (install/clean/version/build/preview) menggantikan pipeline statik lama.
 
 ## Teknologi & Keputusan
 - **Front-end**: React + Vite dengan Tailwind CSS 4 dan HeroUI (komponen siap pakai); CSS lama masih dipertahankan selama transisi.
@@ -40,19 +41,18 @@ Ringkasan teknis proyek ini untuk referensi development dan deployment.
 
 ## Hal yang Perlu Disesuaikan (Branding/Konten)
 Edit nilai berikut agar sesuai identitas:
-- `index.html`
-  - `<title>`, `<meta name="description">`, OG/Twitter (`og:title`, `og:description`, `twitter:*`).
-  - `<link rel="canonical" href="https://www.goodmeow.my.id/">` (ganti domain jika berubah).
-  - JSON‑LD `WebSite` + `Person`: `name`, `url`.
-  - Kontak: `mailto:aarunalr@pm.me`, LinkedIn, GitHub.
-  - Avatar/ikon: ganti GRAVATAR_HASH jika email berubah (lihat Catatan Gravatar).
+- `frontend/src/App.jsx`
+  - Konten hero/blog/about/contact, CTA, teks About, dsb.
+- `frontend/index.html`
+  - Meta `<title>`, `<meta name="description">`, OG/Twitter, JSON-LD WebSite/Person.
+- `scripts/update_build_meta.js`
+  - Jika perlu override versi, jalankan `VERSION=YYYY.MM.DD+sha node scripts/update_build_meta.js` sebelum commit.
 - `site.webmanifest`: `name`, `short_name`, warna tema, ikon jika perlu.
 - `sitemap.xml`: domain dan `lastmod` sesuai tanggal rilis.
 - `robots.txt`: URL sitemap ke domain final.
 - Footer: lisensi CC BY‑SA 4.0 dan versi akan terisi otomatis dari meta `x-build`.
-- `index.html` (Latest Writing): blok `<!-- latest-posts:start --> ... <!-- latest-posts:end -->` diupdate dari RSS; jalankan skrip bila ada rilis baru.
-- `sitemap.config.json`: tambahkan entri jika ada halaman baru; sitemap akan di-generate otomatis.
-- `assets/`: simpan ikon statik (`favicon.svg`, `favicon-32x32.png`, `apple-touch-icon.png`); pastikan manifest & 404 mengarah ke path baru.
+- `sitemap.config.json`: tambahkan entri jika ada halaman baru (skrip generator masih tersedia bila dibutuhkan).
+- `assets/`: simpan ikon statik (`favicon.svg`, `favicon-32x32.png`, `apple-touch-icon.png`).
 
 ## Alur Pengembangan Lokal
 Opsi 1 — server statik lokal cepat:
@@ -62,12 +62,11 @@ Opsi 2 — via Docker (Nginx):
 - Pastikan Docker jalan, lalu `docker compose -f deploy/docker-compose.yml up -d`.
 - Akses melalui container reverse proxy pada network `web` (lihat bagian Deploy). Jika tanpa reverse proxy, Anda bisa publish port sementara: `docker run --rm -p 8080:80 -v "$PWD":/usr/share/nginx/html:ro nginx:alpine` dan buka `http://localhost:8080`.
 
-Opsi 3 — uji lokal workflow versi (tanpa GitHub Actions):
-- Jalankan `DRY_RUN=1 scripts/ci_build_version_local.sh` untuk melihat diffs.
-- Jalankan `scripts/ci_build_version_local.sh` untuk menulis versi ke `index.html` dan bump `styles.css?v=<versi>`.
-- Jalankan `npm run update:latest-posts` untuk sync section Latest Writing dengan feed blog (memerlukan Node 18+).
-- Jalankan `npm run generate:sitemap` untuk menulis ulang `sitemap.xml` (otomatis juga berjalan di GitHub Actions pada push ke `main`).
-- Atau cukup `make sync` untuk menjalankan seluruh rangkaian (`npm install`, update posting terbaru, generate sitemap, dan bump versi).
+Opsi 3 — workflow build React:
+- `cd frontend && npm install && npm run dev` untuk development server Vite (hot reload).
+- `make frontend-preview` untuk preview produksi (`npm run preview`) di `4173`.
+- `make frontend-sync` akan meng-install dependency, membersihkan `dist/`, menjalankan `node scripts/update_build_meta.js`, lalu `npm run build`.
+- `npm run update:latest-posts` & `npm run generate:sitemap` tetap tersedia bila ingin memakai data RSS + sitemap lama (tidak lagi dijalankan otomatis).
 
 ## Deploy
 Arsitektur: reverse proxy Nginx (TLS) → service `landing` (Nginx statik) di network Docker bernama `web`.
@@ -93,9 +92,9 @@ Catatan volume di `deploy/docker-compose.yml`:
 - Service `landing` hanya `expose 80` (tidak publish ke host), sehingga harus diakses via network Docker `web`/reverse proxy.
 
 ## Konvensi Kode
-- Simpel dan bebas dependensi: semua di `index.html` + `styles.css`.
-- CSS: gunakan variabel root dan utilitas yang sudah ada agar gaya konsisten.
-- JS: kecil & inline untuk set versi dan bump query string CSS berdasar meta `x-build`.
+- Komponen React di `frontend/src/` memakai Tailwind utility + komponen HeroUI.
+- Styling global berada di `frontend/src/styles.css` (Tailwind layer + variabel custom).
+- Jangan menambahkan JS inline di HTML legacy; semua interaksi baru sebaiknya masuk ke React.
 
 ## Checklist Pra-Rilis
 - [ ] Branding & kontak sudah final.
@@ -116,11 +115,10 @@ Catatan volume di `deploy/docker-compose.yml`:
 - Security: uji limit rate (dapat 429 jika spam), UA AI (403), dan CSP (resource eksternal hanya Gravatar).
 
 ## Perapian Repo
-- Hapus bagian proyek (cards) dari landing; navigasi & CTA sudah disesuaikan.
-- Ganti favicon/OG/Apple touch ke Gravatar via endpoint publik; tetap dukung ikon lokal pada web manifest.
-- Footer memakai lisensi CC BY‑SA (badge) dan menampilkan versi build.
-- `.gitignore` menolak `.env*` dan `deploy/.env.*`; contoh `deploy/.env.blog.example` dipertahankan.
-- Script util lokal: `scripts/ci_build_version_local.sh` untuk meniru workflow versi.
+- Pastikan konten React (judul, CTA, teks About, dsb.) konsisten dengan branding.
+- Ikon masih bersumber dari Gravatar; update hash jika email berganti.
+- `.gitignore` menolak `.env*` dan `deploy/.env.*`; contoh `deploy/.env.blog.example` tetap ada.
+- Script util: `scripts/update_build_meta.js`, `scripts/update_latest_posts.js`, `scripts/generate_sitemap.js` (opsional).
 
 ## Catatan Gravatar
 - Hash yang digunakan: MD5 dari email `harunbam3@gmail.com` (tidak mengekspos email).
@@ -132,12 +130,8 @@ Catatan volume di `deploy/docker-compose.yml`:
 - Jika ingin sepenuhnya tanpa ketergantungan eksternal, ambil Gravatar dan simpan lokal; perbarui CSP `img-src` bila perlu.
 
 ## Versioning & CI
-- Versi tersimpan di meta `x-build` lalu ditampilkan di footer.
-- GitHub Actions `build-version.yml` otomatis:
-  - Menghitung versi `YYYY.MM.DD+<shortSHA>`.
-  - Mengupdate meta `x-build` di `index.html`.
-  - Meng‑set query string stylesheet `styles.css?v=<versi>` untuk cache‑busting.
-  - Commit kembali ke `main` jika ada perubahan.
+- Versi tersimpan di meta `x-build` pada `frontend/index.html` (juga di `index.html` legacy) dan ditampilkan di footer.
+- GitHub Actions `build-version.yml` menjalankan `node scripts/update_build_meta.js` dan `npm run generate:sitemap`, lalu commit jika ada perubahan.
 
 ## Ide Peningkatan
 - Tambah halaman blog/pos terpisah atau integrasi ke platform blog.
