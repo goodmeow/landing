@@ -12,7 +12,10 @@ function normaliseUrl(base, loc = '/') {
   if (/^https?:\/\//i.test(loc)) {
     return loc;
   }
-  const trimmedBase = base.replace(/\/+$/, '');
+  let trimmedBase = base;
+  while (trimmedBase.endsWith('/')) {
+    trimmedBase = trimmedBase.slice(0, -1);
+  }
   const prefixedLoc = loc.startsWith('/') ? loc : `/${loc}`;
   return `${trimmedBase}${prefixedLoc}`;
 }
