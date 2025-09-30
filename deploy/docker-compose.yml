@@ -4,14 +4,8 @@ services:
     container_name: landing_www
     restart: unless-stopped
     volumes:
-      - ../index.html:/usr/share/nginx/html/index.html:ro
-      - ../styles.css:/usr/share/nginx/html/styles.css:ro
-      - ../robots.txt:/usr/share/nginx/html/robots.txt:ro
-      - ../sitemap.xml:/usr/share/nginx/html/sitemap.xml:ro
-      - ../assets:/usr/share/nginx/html/assets:ro
-      - ../site.webmanifest:/usr/share/nginx/html/site.webmanifest:ro
+      - ../frontend/dist:/usr/share/nginx/html:ro
       - ./nginx/site.conf:/etc/nginx/conf.d/default.conf:ro
-      - ../404.html:/usr/share/nginx/html/404.html:ro
     networks:
       web:
         aliases:
