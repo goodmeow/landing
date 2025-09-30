@@ -24,13 +24,13 @@ jobs:
         run: |
           file=index.html
           if grep -q 'name="x-build"' "$file"; then
-            sed -i -E "s@(meta name=\\\"x-build\\\" content=\\\")[^"]*(\\\")@\\1${VERSION}\\2@" "$file"
+            sed -i -E 's@(meta name="x-build" content=")[^"]*(")@\1'"${VERSION}"'\2@' "$file"
           else
             echo "Missing x-build meta tag in $file" >&2
             exit 1
           fi
           # Ensure stylesheet uses ?v=${VERSION} for cache-busting
-          sed -i -E "s@(link id=\\\"site-css\\\"[^>]*href=\\\")styles\\.css(\?v=[^\\"]*)?\\"@\\1styles.css?v=${VERSION}\\"@" "$file"
+          sed -i -E 's@(link id="site-css"[^>]*href=")styles\.css(\?v=[^"]*)?"@\1styles.css?v='"${VERSION}"'"@' "$file"
 
       - name: Commit and push if changed
         shell: bash
