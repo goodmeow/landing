@@ -27,10 +27,10 @@ Ringkasan teknis proyek ini untuk referensi development dan deployment.
 - `sitemap.config.json`, `scripts/generate_sitemap.js` — konfigurasi URL dan generator sitemap statik.
 - `scripts/lib/` — modul Node berorientasi objek untuk pembaruan konten (LatestPostsUpdater, SitemapGenerator).
 - `scripts/update_build_meta.js` — menyamakan meta `x-build` dengan HEAD (digunakan Makefile & GitHub Actions).
-- `frontend/` — proyek React (Vite) sebagai fondasi migrasi front-end modern.
+- `frontend/` — proyek React (Vite) yang kini memakai Tailwind CSS 4 + HeroUI sebagai basis UI modern.
 
 ## Teknologi & Keputusan
-- **Front-end**: HTML5 semantik, CSS modern (var CSS, color-mix, grid responsif). Tanpa build tool; JS ringan untuk set versi dan cache-busting CSS.
+- **Front-end**: React + Vite dengan Tailwind CSS 4 dan HeroUI (komponen siap pakai); CSS lama masih dipertahankan selama transisi.
 - **SEO/Meta**: Open Graph + Twitter Card, `<link rel="canonical">`, `sitemap.xml`, `robots.txt`.
 - **PWA Meta**: `site.webmanifest` (name/short_name, theme/background, icons dasar).
 - **Avatar/Ikon**: Gravatar endpoint publik (hash MD5 email) digunakan di `<link rel="icon">`, `<link rel="apple-touch-icon">`, OG/Twitter, dan `.avatar` CSS (About). CSP mengizinkan `img-src` ke `https://www.gravatar.com`.
