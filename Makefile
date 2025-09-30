@@ -1,21 +1,6 @@
 FRONTEND_DIR := frontend
-BACKEND_SYNC := install latest-posts sitemap version
 
-.PHONY: install latest-posts sitemap version sync frontend-install frontend-build frontend-preview
-
-install:
-	npm install
-
-latest-posts:
-	npm run update:latest-posts
-
-sitemap:
-	npm run generate:sitemap
-
-version:
-	scripts/ci_build_version_local.sh
-
-sync: install latest-posts sitemap version
+.PHONY: frontend-install frontend-build frontend-preview frontend-clean frontend-sync
 
 frontend-install:
 	cd $(FRONTEND_DIR) && npm install
@@ -26,4 +11,7 @@ frontend-build:
 frontend-preview:
 	cd $(FRONTEND_DIR) && npm run preview -- --host 0.0.0.0 --port 4173
 
-frontend-sync: frontend-install frontend-build
+frontend-clean:
+	rm -rf $(FRONTEND_DIR)/dist
+
+frontend-sync: frontend-install frontend-clean frontend-build
