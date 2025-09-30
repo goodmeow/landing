@@ -25,6 +25,8 @@ Ringkasan teknis proyek ini untuk referensi development dan deployment.
 - `package.json`, `package-lock.json` — tool Node lokal (tidak dibundle) untuk sinkronisasi posting Ghost.
 - `scripts/update_latest_posts.js` — skrip Node yang menarik RSS Ghost dan menulis ulang kartu konten terbaru.
 - `sitemap.config.json`, `scripts/generate_sitemap.js` — konfigurasi URL dan generator sitemap statik.
+- `scripts/lib/` — modul Node berorientasi objek untuk pembaruan konten (LatestPostsUpdater, SitemapGenerator).
+- `frontend/` — proyek React (Vite) sebagai fondasi migrasi front-end modern.
 
 ## Teknologi & Keputusan
 - **Front-end**: HTML5 semantik, CSS modern (var CSS, color-mix, grid responsif). Tanpa build tool; JS ringan untuk set versi dan cache-busting CSS.
