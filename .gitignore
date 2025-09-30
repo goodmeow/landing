@@ -45,3 +45,6 @@ deploy/.env.blog
 # Local agent notes
 Agent.md
 deploy/ghost-smtp-backup.md
+
+# Node tooling
+node_modules/
