@@ -10,6 +10,7 @@ Ringkasan teknis proyek ini untuk referensi development dan deployment.
 - Avatar/ikon: memakai Gravatar (endpoint publik) untuk favicon, Apple touch icon, OG/Twitter image, dan avatar di About.
 - Lisensi konten: CC BY‑SA 4.0 (lihat `LICENSE.md`, badge di footer).
 - Versioning: footer menampilkan versi `YYYY.MM.DD+<shortSHA>` dari meta `x-build` (auto‑update via GitHub Actions).
+  - Seksi "Latest Writing" otomatis diisi ulang dari RSS Ghost (lihat bagian "Integrasi RSS").
 
 ## Struktur Direktori
 - `index.html` — halaman utama dan seluruh konten.
@@ -19,7 +20,9 @@ Ringkasan teknis proyek ini untuk referensi development dan deployment.
 - `deploy/` — konfigurasi Docker Compose dan Nginx.
   - `deploy/docker-compose.yml` — service `landing` (nginx:alpine), mount file statik, expose 80 ke network Docker `web` (eksternal).
   - `deploy/nginx/site.conf` — Nginx untuk menyajikan file statik + custom 404.
-  - `deploy/nginx/goodmeow.conf` — contoh konfigurasi reverse proxy TLS untuk domain `goodmeow.my.id` yang mem‑proxy ke service `landing` di network `web`.
+- `deploy/nginx/goodmeow.conf` — contoh konfigurasi reverse proxy TLS untuk domain `goodmeow.my.id` yang mem‑proxy ke service `landing` di network `web`.
+- `package.json`, `package-lock.json` — tool Node lokal (tidak dibundle) untuk sinkronisasi posting Ghost.
+- `scripts/update_latest_posts.js` — skrip Node yang menarik RSS Ghost dan menulis ulang kartu konten terbaru.
 
 ## Teknologi & Keputusan
 - **Front-end**: HTML5 semantik, CSS modern (var CSS, color-mix, grid responsif). Tanpa build tool; JS ringan untuk set versi dan cache-busting CSS.
@@ -42,6 +45,7 @@ Edit nilai berikut agar sesuai identitas:
 - `sitemap.xml`: domain dan `lastmod` sesuai tanggal rilis.
 - `robots.txt`: URL sitemap ke domain final.
 - Footer: lisensi CC BY‑SA 4.0 dan versi akan terisi otomatis dari meta `x-build`.
+- `index.html` (Latest Writing): blok `<!-- latest-posts:start --> ... <!-- latest-posts:end -->` diupdate dari RSS; jalankan skrip bila ada rilis baru.
 
 ## Alur Pengembangan Lokal
 Opsi 1 — server statik lokal cepat:
@@ -54,6 +58,7 @@ Opsi 2 — via Docker (Nginx):
 Opsi 3 — uji lokal workflow versi (tanpa GitHub Actions):
 - Jalankan `DRY_RUN=1 scripts/ci_build_version_local.sh` untuk melihat diffs.
 - Jalankan `scripts/ci_build_version_local.sh` untuk menulis versi ke `index.html` dan bump `styles.css?v=<versi>`.
+- Jalankan `npm run update:latest-posts` untuk sync section Latest Writing dengan feed blog (memerlukan Node 18+).
 
 ## Deploy
 Arsitektur: reverse proxy Nginx (TLS) → service `landing` (Nginx statik) di network Docker bernama `web`.
@@ -151,6 +156,7 @@ Notes:
 - Ghost mendukung subdirektori jika `url` diset ke `https://domain.tld/blog`; namun subdomain direkomendasikan.
 - Reverse proxy meneruskan `X-Forwarded-*` header; tidak perlu path rewrite tambahan.
 - Produksi: gunakan MySQL dan SMTP Oracle Cloud agar magic link berfungsi.
+- Latest posts di landing diisi ulang dari `https://blog.goodmeow.my.id/rss/`. Pastikan feed publik aktif.
 
 ### Email Delivery (Oracle Cloud) — DNS & SMTP
 - Provider: Oracle Email Delivery (region `ap-batam-1`).
