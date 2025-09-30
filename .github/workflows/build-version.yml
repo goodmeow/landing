@@ -23,26 +23,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate sitemap.xml
-        run: npm run generate:sitemap
-
       - name: Compute version
         shell: bash
         run: |
           echo "VERSION=$(date -u +'%Y.%m.%d')+${GITHUB_SHA::7}" >> "$GITHUB_ENV"
-
-      - name: Update x-build meta and CSS version
-        shell: bash
+      - name: Update sitemap and x-build meta
         run: |
-          file=index.html
-          if grep -q 'name="x-build"' "$file"; then
-            sed -i -E 's@(meta name="x-build" content=")[^"]*(")@\1'"${VERSION}"'\2@' "$file"
-          else
-            echo "Missing x-build meta tag in $file" >&2
-            exit 1
-          fi
-          # Ensure stylesheet uses ?v=${VERSION} for cache-busting
-          sed -i -E 's@(link id="site-css"[^>]*href=")styles\.css(\?v=[^"]*)?"@\1styles.css?v='"${VERSION}"'"@' "$file"
+          npm run generate:sitemap
+          node scripts/update_build_meta.js
 
       - name: Commit and push if changed
         shell: bash
@@ -52,7 +40,7 @@ jobs:
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add index.html sitemap.xml
+            git add index.html frontend/index.html sitemap.xml
             git commit -m "chore(meta): update x-build to ${VERSION} [skip ci] [build-metadata]"
             git push
           fi

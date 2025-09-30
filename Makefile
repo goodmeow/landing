@@ -1,6 +1,6 @@
 FRONTEND_DIR := frontend
 
-.PHONY: frontend-install frontend-build frontend-preview frontend-clean frontend-sync
+.PHONY: frontend-install frontend-build frontend-preview frontend-clean frontend-sync frontend-version
 
 frontend-install:
 	cd $(FRONTEND_DIR) && npm install
@@ -14,4 +14,7 @@ frontend-preview:
 frontend-clean:
 	rm -rf $(FRONTEND_DIR)/dist
 
-frontend-sync: frontend-install frontend-clean frontend-build
+frontend-version:
+	NODE_ENV=production node scripts/update_build_meta.js
+
+frontend-sync: frontend-install frontend-clean frontend-version frontend-build
