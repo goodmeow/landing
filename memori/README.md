@@ -24,10 +24,7 @@ Ringkasan teknis proyek ini untuk referensi development dan deployment.
 - `deploy/nginx/goodmeow.conf` — contoh konfigurasi reverse proxy TLS untuk domain `goodmeow.my.id` yang mem‑proxy ke service `landing` di network `web`.
 - `package.json`, `package-lock.json` — tool Node lokal (tidak dibundle) untuk sinkronisasi posting Ghost.
 - `scripts/update_latest_posts.js` — skrip Node yang menarik RSS Ghost dan menulis ulang kartu konten terbaru.
-<<<<<<< HEAD
-=======
 - `sitemap.config.json`, `scripts/generate_sitemap.js` — konfigurasi URL dan generator sitemap statik.
->>>>>>> staging/ghost-blog
 
 ## Teknologi & Keputusan
 - **Front-end**: HTML5 semantik, CSS modern (var CSS, color-mix, grid responsif). Tanpa build tool; JS ringan untuk set versi dan cache-busting CSS.
@@ -51,11 +48,8 @@ Edit nilai berikut agar sesuai identitas:
 - `robots.txt`: URL sitemap ke domain final.
 - Footer: lisensi CC BY‑SA 4.0 dan versi akan terisi otomatis dari meta `x-build`.
 - `index.html` (Latest Writing): blok `<!-- latest-posts:start --> ... <!-- latest-posts:end -->` diupdate dari RSS; jalankan skrip bila ada rilis baru.
-<<<<<<< HEAD
-=======
 - `sitemap.config.json`: tambahkan entri jika ada halaman baru; sitemap akan di-generate otomatis.
 - `assets/`: simpan ikon statik (`favicon.svg`, `favicon-32x32.png`, `apple-touch-icon.png`); pastikan manifest & 404 mengarah ke path baru.
->>>>>>> staging/ghost-blog
 
 ## Alur Pengembangan Lokal
 Opsi 1 — server statik lokal cepat:
@@ -70,10 +64,6 @@ Opsi 3 — uji lokal workflow versi (tanpa GitHub Actions):
 - Jalankan `scripts/ci_build_version_local.sh` untuk menulis versi ke `index.html` dan bump `styles.css?v=<versi>`.
 - Jalankan `npm run update:latest-posts` untuk sync section Latest Writing dengan feed blog (memerlukan Node 18+).
 - Jalankan `npm run generate:sitemap` untuk menulis ulang `sitemap.xml` (otomatis juga berjalan di GitHub Actions pada push ke `main`).
-<<<<<<< HEAD
-=======
-- Jalankan `npm run generate:sitemap` untuk menulis ulang `sitemap.xml` (otomatis juga berjalan di GitHub Actions pada push ke `main`).
->>>>>>> staging/ghost-blog
 
 ## Deploy
 Arsitektur: reverse proxy Nginx (TLS) → service `landing` (Nginx statik) di network Docker bernama `web`.
@@ -172,10 +162,7 @@ Notes:
 - Reverse proxy meneruskan `X-Forwarded-*` header; tidak perlu path rewrite tambahan.
 - Produksi: gunakan MySQL dan SMTP Oracle Cloud agar magic link berfungsi.
 - Latest posts di landing diisi ulang dari `https://blog.goodmeow.my.id/rss/`. Pastikan feed publik aktif.
-<<<<<<< HEAD
-=======
 - Workflow GitHub `build-version.yml` kini juga menjalankan `npm ci` + `npm run generate:sitemap` sebelum memperbarui meta versi.
->>>>>>> staging/ghost-blog
 
 ### Email Delivery (Oracle Cloud) — DNS & SMTP
 - Provider: Oracle Email Delivery (region `ap-batam-1`).
