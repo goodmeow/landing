@@ -64,6 +64,7 @@ Opsi 3 — uji lokal workflow versi (tanpa GitHub Actions):
 - Jalankan `scripts/ci_build_version_local.sh` untuk menulis versi ke `index.html` dan bump `styles.css?v=<versi>`.
 - Jalankan `npm run update:latest-posts` untuk sync section Latest Writing dengan feed blog (memerlukan Node 18+).
 - Jalankan `npm run generate:sitemap` untuk menulis ulang `sitemap.xml` (otomatis juga berjalan di GitHub Actions pada push ke `main`).
+- Atau cukup `make sync` untuk menjalankan seluruh rangkaian (`npm install`, update posting terbaru, generate sitemap, dan bump versi).
 
 ## Deploy
 Arsitektur: reverse proxy Nginx (TLS) → service `landing` (Nginx statik) di network Docker bernama `web`.
