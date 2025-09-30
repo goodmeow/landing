@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Button } from '@heroui/react'
 
 const latestPosts = [
   {
@@ -37,9 +38,9 @@ function App() {
           <nav className="nav" aria-label="Primary">
             <a href="#blog">Blog</a>
             <a href="#about">About</a>
-            <a href="#contact" className="btn btn-small">
-              Contact
-            </a>
+          <Button as="a" href="#contact" size="sm" color="primary" radius="lg">
+            Contact
+          </Button>
           </nav>
         </div>
       </header>
@@ -52,9 +53,9 @@ function App() {
               I build useful things on the web and write about engineering, productivity, and what I learn along the way.
             </p>
             <div className="cta">
-              <a href="#blog" className="btn">
+              <Button as="a" href="#blog" color="primary" size="md" radius="lg">
                 Read the Blog
-              </a>
+              </Button>
             </div>
           </div>
         </section>
@@ -121,15 +122,15 @@ function App() {
             <h2>Get in touch</h2>
             <p className="lead">Have a project or a question? I’d love to hear from you.</p>
             <div className="cta">
-              <a className="btn" href="mailto:aarunalr@pm.me">
+              <Button as="a" href="mailto:aarunalr@pm.me" color="primary" radius="lg">
                 Email me
-              </a>
-              <a className="btn btn-ghost" href="https://www.linkedin.com/in/aarunalr">
+              </Button>
+              <Button as="a" href="https://www.linkedin.com/in/aarunalr" variant="bordered" radius="lg">
                 LinkedIn
-              </a>
-              <a className="btn btn-ghost" href="https://github.com/goodmeow">
+              </Button>
+              <Button as="a" href="https://github.com/goodmeow" variant="bordered" radius="lg">
                 GitHub
-              </a>
+              </Button>
             </div>
           </div>
         </section>
