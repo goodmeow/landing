@@ -1,0 +1,13 @@
+{
+  "name": "goodmeow-landing",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Utilities for maintaining the goodmeow landing page.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "update:latest-posts": "node scripts/update_latest_posts.js"
+  },
+  "dependencies": {
+    "rss-parser": "^3.13.0"
+  }
+}
