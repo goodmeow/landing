@@ -162,9 +162,9 @@ function App() {
       <main>
         <section className="hero" id="top">
           <div className="container">
-            <h1>Developer, Writer, Lifelong Learner.</h1>
+            <h1>Longlife Learner, Developer, & Writer</h1>
             <p className="lead">
-              I build useful things on the web and write about engineering, productivity, and what I learn along the way.
+              I build useful things on the daily basis and write about tech, productivity, and what I learn along the way.
             </p>
             <div className="cta">
               <Button as="a" href="#blog" color="primary" size="md" radius="lg">
@@ -247,10 +247,9 @@ function App() {
             <Card className="contact-panel" radius="2xl" shadow="lg" isBlurred>
               <CardBody className="contact-panel-body">
                 <div className="contact-intro">
-                  <h2>Let&apos;s make the web prettier.</h2>
+                  <h2>Let&apos;s catch up!</h2>
                   <p className="contact-lead">
-                    Experience thoughtful data storytelling, modern dashboards, and robust engineering. Bring your idea and I&apos;ll help shape it into
-                    something people will love to use.
+                    This is where you can find me to work with.
                   </p>
                   <div className="contact-actions">
                     <Button
