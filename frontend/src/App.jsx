@@ -147,7 +147,6 @@ function App() {
               className="theme-toggle"
               aria-label={`Switch to ${nextTheme} mode`}
               onPress={toggleTheme}
-              disableRipple
             >
               {theme === 'light' ? <MoonIcon /> : <SunIcon />}
             </Button>

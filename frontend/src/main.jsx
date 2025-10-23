@@ -16,7 +16,7 @@ if (typeof document !== 'undefined') {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <HeroUIProvider locale={browserLocale}>
+    <HeroUIProvider locale={browserLocale} disableRipple>
       <App />
     </HeroUIProvider>
   </StrictMode>,
