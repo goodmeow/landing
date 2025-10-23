@@ -15,7 +15,6 @@
     "@heroicons/react": "^2.2.0",
     "@heroui/react": "^2.8.4",
     "@heroui/theme": "^2.4.22",
-    "framer-motion": "^11.18.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
