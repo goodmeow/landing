@@ -5,11 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/sync-latest-posts.mjs",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "sync:posts": "node scripts/sync-latest-posts.mjs"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -27,7 +25,6 @@
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
-    "fast-xml-parser": "^5.2.5",
     "globals": "^16.4.0",
     "tailwindcss": "^4.1.13",
     "vite": "^7.1.7"
