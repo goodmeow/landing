@@ -97,11 +97,12 @@ function App() {
   const version = useBuildVersion()
   const [{ theme, manual }, setThemeState] = useState(resolvePreferredTheme)
   const nextTheme = theme === 'light' ? 'dark' : 'light'
-  const initialPosts = []
-  const [blogPosts, setBlogPosts] = useState(initialPosts)
   const ghostContentUrl =
     import.meta.env.VITE_GHOST_CONTENT_URL?.trim() || DEFAULT_GHOST_API_URL
   const ghostContentKey = import.meta.env.VITE_GHOST_CONTENT_KEY?.trim() || ''
+  const [blogPosts, setBlogPosts] = useState([])
+  const [loadingPosts, setLoadingPosts] = useState(Boolean(ghostContentKey))
+  const [postsErrored, setPostsErrored] = useState(false)
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -132,7 +133,13 @@ function App() {
   }, [manual])
 
   useEffect(() => {
-    if (!ghostContentKey) return
+    if (!ghostContentKey) {
+      setLoadingPosts(false)
+      return
+    }
+
+    setLoadingPosts(true)
+    setPostsErrored(false)
     let ignore = false
     const controller = new AbortController()
 
@@ -175,10 +182,18 @@ function App() {
 
         if (!ignore && mapped.length) {
           setBlogPosts(mapped)
+          setPostsErrored(false)
         }
       } catch (error) {
         if (error.name === 'AbortError') return
+        if (!ignore) {
+          setPostsErrored(true)
+        }
         console.warn('[App] Failed to fetch Ghost posts; showing empty list.', error)
+      } finally {
+        if (!ignore) {
+          setLoadingPosts(false)
+        }
       }
     }
 
@@ -259,7 +274,13 @@ function App() {
               {blogPosts.map((post) => (
                 <Card key={post.url} as="article" className="blog-card" radius="lg" shadow="sm" isPressable>
                   <CardBody className="blog-card-body">
-                    <a className="blog-card-link" href={post.url} rel="noopener noreferrer">
+                    <a
+                      className="blog-card-link"
+                      href={post.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Read ${post.title}`}
+                    >
                       <h3>{post.title}</h3>
                       <p className="muted">
                         <time dateTime={post.isoDate ?? post.date}>{post.date}</time>
@@ -277,6 +298,20 @@ function App() {
                 </Card>
               ))}
             </div>
+            {loadingPosts && (
+              <p className="blog-status" role="status" aria-live="polite">
+                Loading latest posts…
+              </p>
+            )}
+            {!loadingPosts && blogPosts.length === 0 && (
+              <p className="blog-status" role="status" aria-live="polite">
+                {postsErrored ? 'Unable to load the latest posts right now.' : 'No recent posts published yet.'}{' '}
+                <a href="https://blog.goodmeow.my.id/" target="_blank" rel="noopener noreferrer">
+                  Visit the full blog
+                </a>
+                .
+              </p>
+            )}
           </div>
         </section>
 

@@ -189,6 +189,14 @@ a { color: inherit; text-decoration: none; }
   color: var(--muted);
   border-radius: var(--radius-pill);
 }
+.blog-status {
+  margin-top: 18px;
+  color: var(--muted);
+  text-align: center;
+}
+.blog-status a {
+  color: var(--accent);
+}
 .links { display: flex; gap: 14px; }
 .links a { color: var(--accent); }
 
