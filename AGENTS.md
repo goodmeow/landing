@@ -6,9 +6,9 @@
 - Ghost CMS powers `blog.goodmeow.my.id`; the landing page ingests the public RSS feed to populate latest posts.
 
 ## Project Structure & Module Organization
-- `frontend/` — main application; place components in `src/`, shared JSON in `src/data/`, and static files in `public/`.
-- `frontend/scripts/` — automation (e.g., `sync-latest-posts.mjs` for RSS ingestion).
-- `scripts/` — operational helpers such as `cron-sync-posts.sh` and `update_build_meta.js`.
+- `frontend/` — main application; place components in `src/` and static files in `public/`.
+- `frontend/scripts/` — reserved for future automation utilities.
+- `scripts/` — operational helpers such as `update_build_meta.js`.
 - `deploy/` — Docker Compose manifests plus nginx configs for static hosting and reverse proxying.
 - `blog_content/`, `archive/` — Ghost volumes and historical assets; keep untouched unless refreshing staging content.
 
@@ -16,7 +16,6 @@
 Run inside `frontend/` unless stated.
 - `npm install` — install dependencies.
 - `npm run dev` — Vite dev server at `http://localhost:5173`.
-- `npm run sync:posts` — refresh `src/data/latestPosts.json` from Ghost RSS (runs automatically before `npm run build`).
 - `npm run build` — production bundle into `dist/`.
 - `npm run preview` — serve the built bundle locally.
 - `npm run lint` — ESLint flat config.
@@ -41,10 +40,7 @@ Run inside `frontend/` unless stated.
 - PRs need a concise summary, screenshots for UI changes, reviewer instructions, and preview URLs when available.
 
 ## Content Sync & Configuration
-- `frontend/scripts/sync-latest-posts.mjs` honours `GM_RSS_URL` and `GM_RSS_MAX_POSTS`; set them in `.env.local`, cron, or CI when pointing at alternate feeds.
-- `scripts/cron-sync-posts.sh` runs nightly (03:00 local cron) to refresh `latestPosts.json`; check `logs/rss-sync.log` for failures.
-- Commit regenerated `latestPosts.json` so the landing page renders offline when builds run in CI or without network access.
-- Fallback content lives in `frontend/src/App.jsx` as `fallbackPosts` for RSS outages.
+- The SPA fetches latest posts from Ghost at runtime via `VITE_GHOST_CONTENT_*`.
 
 ## Key Artifacts & Branding
 - `frontend/index.html` holds document metadata, analytics, JSON-LD, and the `x-build` meta tag.
@@ -59,7 +55,7 @@ Run inside `frontend/` unless stated.
 - Ghost CMS volumes live under `blog_content/` and `blog_mysql/`; keep backups before upgrades.
 
 ## Operational Tips
-- Use the cron script or GitHub Actions to keep RSS data fresh; if multiple posts are expected, verify the Ghost feed publishes them publicly.
+- If Ghost data needs to be pre-fetched for testing, implement a local script in `frontend/scripts/` as required.
 - When editing SEO/PWA assets (`robots.txt`, `sitemap.xml`, `site.webmanifest`, favicons), copy updates into `frontend/public/` so they ship with the bundle.
 - For router-aware components, pass `navigate`/`useHref` implementations to `HeroUIProvider`; otherwise the default anchor usage suffices.
 - To disable ripples globally, the app sets `disableRipple` on `HeroUIProvider` in `frontend/src/main.jsx`.
@@ -67,7 +63,6 @@ Run inside `frontend/` unless stated.
 ## Quality Checks & Runbooks
 - Smoke test theme switching, blog cards, and contact CTAs in both dev (`npm run dev`) and preview (`make frontend-preview`) modes.
 - After `make frontend-version`, confirm the footer displays the new build string and that `index.html` has the updated `x-build` meta.
-- Keep an eye on `logs/rss-sync.log` for cron issues; rerun the script manually with `/home/ubuntu/landing/scripts/cron-sync-posts.sh` if needed.
 - If Nginx config changes, validate with `nginx -t` inside the container or via `docker compose exec landing_www nginx -t` before reloads.
 
 ## Contact
