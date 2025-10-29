@@ -2,18 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Button, Card, CardBody, CardHeader, Chip, Divider } from '@heroui/react'
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 
-import latestPosts from './data/latestPosts.json'
-
-const fallbackPosts = [
-  {
-    title: 'Coming soon',
-    url: 'https://blog.goodmeow.my.id/coming-soon/',
-    date: 'Sep 09, 2025',
-    description:
-      "This is Notebook, a brand new site by Harun Al Rasyid that's just getting started. Things will be up and running here shortly, but you can subscribe in the meantime if you'd like…",
-    tags: ['News'],
-  },
-]
 
 function useBuildVersion() {
   const [version, setVersion] = useState('')
@@ -29,6 +17,30 @@ function useBuildVersion() {
 }
 
 const THEME_STORAGE_KEY = 'gm-theme-preference'
+const DEFAULT_GHOST_API_URL = 'https://blog.goodmeow.my.id/ghost/api/content/posts/'
+
+function formatDate(dateString) {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  if (Number.isNaN(date.getTime())) return ''
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+  }).format(date)
+}
+
+function normaliseTags(tags = []) {
+  if (!Array.isArray(tags)) return []
+  return tags
+    .map((tag) => {
+      if (!tag) return ''
+      if (typeof tag === 'string') return tag
+      if (typeof tag?.name === 'string') return tag.name
+      return tag?.slug ?? ''
+    })
+    .filter(Boolean)
+}
 
 const ProtonMailIcon = (props) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" {...props}>
@@ -85,7 +97,11 @@ function App() {
   const version = useBuildVersion()
   const [{ theme, manual }, setThemeState] = useState(resolvePreferredTheme)
   const nextTheme = theme === 'light' ? 'dark' : 'light'
-  const blogPosts = Array.isArray(latestPosts) && latestPosts.length ? latestPosts : fallbackPosts
+  const initialPosts = []
+  const [blogPosts, setBlogPosts] = useState(initialPosts)
+  const ghostContentUrl =
+    import.meta.env.VITE_GHOST_CONTENT_URL?.trim() || DEFAULT_GHOST_API_URL
+  const ghostContentKey = import.meta.env.VITE_GHOST_CONTENT_KEY?.trim() || ''
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -114,6 +130,64 @@ function App() {
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [manual])
+
+  useEffect(() => {
+    if (!ghostContentKey) return
+    let ignore = false
+    const controller = new AbortController()
+
+    async function loadPosts() {
+      try {
+        const url = new URL(ghostContentUrl || DEFAULT_GHOST_API_URL)
+        url.searchParams.set('key', ghostContentKey)
+        url.searchParams.set('limit', '3')
+        url.searchParams.set('include', 'tags')
+        url.searchParams.set('fields', 'title,url,excerpt,published_at')
+
+        const response = await fetch(url, {
+          headers: { Accept: 'application/json' },
+          signal: controller.signal,
+        })
+
+        if (!response.ok) {
+          throw new Error(`Ghost Content API error: ${response.status} ${response.statusText}`)
+        }
+
+        const payload = await response.json()
+        const posts = Array.isArray(payload?.posts) ? payload.posts : []
+        if (!posts.length) return
+
+        const mapped = posts
+          .map((post) => ({
+            title: post?.title ?? '',
+            url: post?.url ?? '',
+            date: formatDate(post?.published_at),
+            isoDate: post?.published_at ?? '',
+            description: post?.excerpt ?? '',
+            tags: normaliseTags(post?.tags),
+          }))
+          .filter((post) => post.title && post.url)
+          .sort((a, b) => {
+            if (!a.isoDate) return 1
+            if (!b.isoDate) return -1
+            return new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime()
+          })
+
+        if (!ignore && mapped.length) {
+          setBlogPosts(mapped)
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') return
+        console.warn('[App] Failed to fetch Ghost posts; showing empty list.', error)
+      }
+    }
+
+    loadPosts()
+    return () => {
+      ignore = true
+      controller.abort()
+    }
+  }, [ghostContentKey, ghostContentUrl])
 
   const toggleTheme = () => {
     setThemeState({ theme: nextTheme, manual: true })
@@ -185,22 +259,20 @@ function App() {
               {blogPosts.map((post) => (
                 <Card key={post.url} as="article" className="blog-card" radius="lg" shadow="sm" isPressable>
                   <CardBody className="blog-card-body">
-                    <h3>
-                      <a href={post.url} rel="noopener noreferrer">
-                        {post.title}
-                      </a>
-                    </h3>
-                    <p className="muted">
-                      <time dateTime={post.isoDate ?? post.date}>{post.date}</time>
-                    </p>
-                    <p>{post.description}</p>
-                    <div className="tags">
-                      {post.tags.map((tag) => (
-                        <Chip key={tag} size="sm" variant="flat" className="tag-chip" radius="full">
-                          {tag}
-                        </Chip>
-                      ))}
-                    </div>
+                    <a className="blog-card-link" href={post.url} rel="noopener noreferrer">
+                      <h3>{post.title}</h3>
+                      <p className="muted">
+                        <time dateTime={post.isoDate ?? post.date}>{post.date}</time>
+                      </p>
+                      <p>{post.description}</p>
+                      <div className="tags">
+                        {post.tags.map((tag) => (
+                          <Chip key={tag} size="sm" variant="flat" className="tag-chip" radius="full">
+                            {tag}
+                          </Chip>
+                        ))}
+                      </div>
+                    </a>
                   </CardBody>
                 </Card>
               ))}

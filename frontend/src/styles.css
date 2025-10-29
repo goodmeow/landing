@@ -164,6 +164,17 @@ a { color: inherit; text-decoration: none; }
   gap: 12px;
   padding: 22px;
 }
+.blog-card-link {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+.blog-card-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
 .blog-card-body h3 {
   margin: 0;
   font-size: 18px;
