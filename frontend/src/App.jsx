@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { motion } from 'framer-motion'
 import { Button, Card, CardBody, CardHeader, Chip, Divider } from '@heroui/react'
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 
@@ -18,6 +19,8 @@ function useBuildVersion() {
 
 const THEME_STORAGE_KEY = 'gm-theme-preference'
 const DEFAULT_GHOST_API_URL = 'https://blog.goodmeow.my.id/ghost/api/content/posts/'
+const MotionSection = motion.section
+const MotionCard = motion(Card)
 
 function formatDate(dateString) {
   if (!dateString) return ''
@@ -42,8 +45,15 @@ function normaliseTags(tags = []) {
     .filter(Boolean)
 }
 
-const ProtonMailIcon = (props) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" {...props}>
+const ProtonMailIcon = ({ size = 24, width, height, ...props }) => (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+    width={width ?? size}
+    height={height ?? size}
+    {...props}
+  >
     <path
       fill="currentColor"
       d="m15.24 8.998 3.656-3.073v15.81H2.482C1.11 21.735 0 20.609 0 19.223V6.944l7.58 6.38a2.186 2.186 0 0 0 2.871-.042l4.792-4.284h-.003zm-5.456 3.538 1.809-1.616a2.438 2.438 0 0 1-1.178-.533L.905 2.395A.552.552 0 0 0 0 2.826v2.811l8.226 6.923a1.186 1.186 0 0 0 1.558-.024zM23.871 2.463a.551.551 0 0 0-.776-.068l-3.199 2.688v16.653h1.623c1.371 0 2.481-1.127 2.481-2.513V2.824a.551.551 0 0 0-.129-.36z"
@@ -51,8 +61,15 @@ const ProtonMailIcon = (props) => (
   </svg>
 )
 
-const GithubIcon = (props) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" {...props}>
+const GithubIcon = ({ size = 24, width, height, ...props }) => (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+    width={width ?? size}
+    height={height ?? size}
+    {...props}
+  >
     <path
       fill="currentColor"
       d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
@@ -60,8 +77,61 @@ const GithubIcon = (props) => (
   </svg>
 )
 
-const LinkedinIcon = (props) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" {...props}>
+const CameraIcon = ({ size = 24, width, height, ...props }) => (
+  <svg
+    fill="none"
+    height={height ?? size}
+    width={width ?? size}
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+    {...props}
+  >
+    <path
+      clipRule="evenodd"
+      d="M17.44 6.236c.04.07.11.12.2.12 2.4 0 4.36 1.958 4.36 4.355v5.934A4.368 4.368 0 0117.64 21H6.36A4.361 4.361 0 012 16.645V10.71a4.361 4.361 0 014.36-4.355c.08 0 .16-.04.19-.12l.06-.12.106-.222a97.79 97.79 0 01.714-1.486C7.89 3.51 8.67 3.01 9.64 3h4.71c.97.01 1.76.51 2.22 1.408.157.315.397.822.629 1.31l.141.299.1.22zm-.73 3.836c0 .5.4.9.9.9s.91-.4.91-.9-.41-.909-.91-.909-.9.41-.9.91zm-6.44 1.548c.47-.47 1.08-.719 1.73-.719.65 0 1.26.25 1.72.71.46.459.71 1.068.71 1.717A2.438 2.438 0 0112 15.756c-.65 0-1.26-.25-1.72-.71a2.408 2.408 0 01-.71-1.717v-.01c-.01-.63.24-1.24.7-1.699zm4.5 4.485a3.91 3.91 0 01-2.77 1.15 3.921 3.921 0 01-3.93-3.926 3.865 3.865 0 011.14-2.767A3.921 3.921 0 0112 9.402c1.05 0 2.04.41 2.78 1.15.74.749 1.15 1.738 1.15 2.777a3.958 3.958 0 01-1.16 2.776z"
+      fill="currentColor"
+      fillRule="evenodd"
+    />
+  </svg>
+)
+
+const UserIcon = ({ size = 24, width, height, ...props }) => (
+  <svg
+    data-name="Iconly/Curved/Profile"
+    height={height ?? size}
+    width={width ?? size}
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+    {...props}
+  >
+    <g
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeMiterlimit={10}
+      strokeWidth={1.5}
+    >
+      <path
+        d="M11.845 21.662C8.153 21.662 5 21.088 5 18.787s3.133-4.425 6.845-4.425c3.692 0 6.845 2.1 6.845 4.4s-3.134 2.9-6.845 2.9z"
+        data-name="Stroke 1"
+      />
+      <path d="M11.837 11.174a4.372 4.372 0 10-.031 0z" data-name="Stroke 3" />
+    </g>
+  </svg>
+)
+
+const LinkedinIcon = ({ size = 24, width, height, ...props }) => (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+    width={width ?? size}
+    height={height ?? size}
+    {...props}
+  >
     <path
       fill="currentColor"
       d="M4.983 3.5c0 1.381-1.11 2.5-2.5 2.5S0 4.881 0 3.5 1.11 1 2.483 1s2.5 1.119 2.5 2.5zM.24 8.46h4.487v12.24H.24zm7.546 0h4.303v1.672h.062c.599-1.134 2.064-2.33 4.247-2.33 4.54 0 5.381 2.99 5.381 6.877v7.021H16.29v-6.22c0-1.484-.027-3.39-2.065-3.39-2.07 0-2.387 1.62-2.387 3.289v6.321H7.786z"
@@ -69,8 +139,15 @@ const LinkedinIcon = (props) => (
   </svg>
 )
 
-const CredlyIcon = (props) => (
-  <svg viewBox="0 0 1024 1024" aria-hidden="true" focusable="false" {...props}>
+const CredlyIcon = ({ size = 24, width, height, ...props }) => (
+  <svg
+    viewBox="0 0 1024 1024"
+    aria-hidden="true"
+    focusable="false"
+    width={width ?? size}
+    height={height ?? size}
+    {...props}
+  >
     <circle cx="512" cy="512" r="512" fill="#f36c21" />
     <path
       fill="#fff"
@@ -103,6 +180,14 @@ function App() {
   const [blogPosts, setBlogPosts] = useState([])
   const [loadingPosts, setLoadingPosts] = useState(Boolean(ghostContentKey))
   const [postsErrored, setPostsErrored] = useState(false)
+
+  const blogCardVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0, y: 16 },
+      visible: { opacity: 1, y: 0 },
+    }),
+    [],
+  )
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -234,13 +319,14 @@ function App() {
               radius="full"
               className="theme-toggle"
               aria-label={`Switch to ${nextTheme} mode`}
+              disableRipple={false}
               onPress={toggleTheme}
             >
-              {theme === 'light' ? <MoonIcon /> : <SunIcon />}
+              {theme === 'light' ? <MoonIcon aria-hidden="true" focusable="false" /> : <SunIcon aria-hidden="true" focusable="false" />}
             </Button>
             <a href="#blog">Blog</a>
             <a href="#about">About</a>
-            <Button as="a" href="#contact" size="sm" color="primary" radius="lg">
+            <Button as="a" href="#contact" size="sm" color="primary" radius="lg" disableRipple={false}>
               Contact
             </Button>
           </nav>
@@ -248,21 +334,34 @@ function App() {
       </header>
 
       <main>
-        <section className="hero" id="top">
+        <MotionSection
+          className="hero"
+          id="top"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
           <div className="container">
             <h1>Longlife Learner, Developer, & Writer</h1>
             <p className="lead">
               I build useful things on the daily basis and write about tech, productivity, and what I learn along the way.
             </p>
             <div className="cta">
-              <Button as="a" href="#blog" color="primary" size="md" radius="lg">
+              <Button as="a" href="#blog" color="primary" size="md" radius="lg" disableRipple={false}>
                 Read the Blog
               </Button>
             </div>
           </div>
-        </section>
+        </MotionSection>
 
-        <section id="blog" className="section">
+        <MotionSection
+          id="blog"
+          className="section"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        >
           <div className="container">
             <div className="section-head">
               <h2>Latest Writing</h2>
@@ -271,31 +370,39 @@ function App() {
               </a>
             </div>
             <div className="grid cards">
-              {blogPosts.map((post) => (
-                <Card key={post.url} as="article" className="blog-card" radius="lg" shadow="sm" isPressable>
+              {blogPosts.map((post, index) => (
+                <MotionCard
+                  key={post.url}
+                  as="a"
+                  href={post.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Read ${post.title}`}
+                  className="blog-card"
+                  radius="lg"
+                  shadow="sm"
+                  isPressable
+                  disableRipple={false}
+                  variants={blogCardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ duration: 0.35, ease: 'easeOut', delay: index * 0.08 }}
+                >
                   <CardBody className="blog-card-body">
-                    <a
-                      className="blog-card-link"
-                      href={post.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Read ${post.title}`}
-                    >
-                      <h3>{post.title}</h3>
-                      <p className="muted">
-                        <time dateTime={post.isoDate ?? post.date}>{post.date}</time>
-                      </p>
-                      <p>{post.description}</p>
-                      <div className="tags">
-                        {post.tags.map((tag) => (
-                          <Chip key={tag} size="sm" variant="flat" className="tag-chip" radius="full">
-                            {tag}
-                          </Chip>
-                        ))}
-                      </div>
-                    </a>
+                    <h3>{post.title}</h3>
+                    <p className="muted">
+                      <time dateTime={post.isoDate ?? post.date}>{post.date}</time>
+                    </p>
+                    <p>{post.description}</p>
+                    <div className="tags">
+                      {post.tags.map((tag) => (
+                        <Chip key={tag} size="sm" variant="flat" className="tag-chip" radius="full">
+                          {tag}
+                        </Chip>
+                      ))}
+                    </div>
                   </CardBody>
-                </Card>
+                </MotionCard>
               ))}
             </div>
             {loadingPosts && (
@@ -313,7 +420,7 @@ function App() {
               </p>
             )}
           </div>
-        </section>
+        </MotionSection>
 
         <section id="about" className="section">
           <div className="container">
@@ -364,8 +471,9 @@ function App() {
                       variant="bordered"
                       size="lg"
                       radius="full"
-                      startContent={<ProtonMailIcon className="contact-button-icon" />}
+                      startContent={<ProtonMailIcon size={18} />}
                       className="contact-button"
+                      disableRipple={false}
                     >
                       Email me
                     </Button>
@@ -375,8 +483,9 @@ function App() {
                       variant="bordered"
                       size="lg"
                       radius="full"
-                      startContent={<GithubIcon className="contact-button-icon" />}
+                      startContent={<GithubIcon size={18} />}
                       className="contact-button"
+                      disableRipple={false}
                     >
                       GitHub
                     </Button>
@@ -386,8 +495,9 @@ function App() {
                       variant="bordered"
                       size="lg"
                       radius="full"
-                      startContent={<CredlyIcon className="contact-button-icon credly-icon" />}
+                      startContent={<CredlyIcon size={18} />}
                       className="contact-button"
+                      disableRipple={false}
                     >
                       Credly
                     </Button>
@@ -397,8 +507,9 @@ function App() {
                       variant="bordered"
                       size="lg"
                       radius="full"
-                      startContent={<LinkedinIcon className="contact-button-icon" />}
+                      startContent={<LinkedinIcon size={18} />}
                       className="contact-button"
+                      disableRipple={false}
                     >
                       LinkedIn
                     </Button>
