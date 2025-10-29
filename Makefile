@@ -1,12 +1,11 @@
 FRONTEND_DIR := frontend
-
 .PHONY: frontend-install frontend-build frontend-preview frontend-clean frontend-sync frontend-version landing-deploy
 
 frontend-install:
 	cd $(FRONTEND_DIR) && npm install
 
 frontend-build:
-	cd $(FRONTEND_DIR) && npm run build
+	cd $(FRONTEND_DIR) && npm run lint && npm run build
 
 frontend-preview:
 	cd $(FRONTEND_DIR) && npm run preview -- --host 0.0.0.0 --port 4173
