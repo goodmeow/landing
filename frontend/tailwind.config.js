@@ -67,22 +67,45 @@ export default {
         dark: {
           extend: 'dark',
           colors: {
-            background: '#0b0c10',
-            foreground: '#e5e7eb',
-            panel: '#111217',
-            border: '#1f2430',
-            muted: '#a1a1aa',
+            background: '#071330', // Dark Blue
+            foreground: '#e8dbcb', // Ivory
+            panel: '#1a3352', // blend of Dark Blue & Blue Grotto
+            border: '#1f2d4d', // softened edge tone
+            muted: '#969caa', // Ivory + Cornflower mix
+            divider: '#213151',
+            focus: '#5293b7', // Blue Grotto
+            overlay: '#050a1e',
+            content1: {
+              DEFAULT: '#1d3958',
+              foreground: '#e8dbcb',
+            },
+            content2: {
+              DEFAULT: '#253556',
+              foreground: '#e8dbcb',
+            },
+            content3: {
+              DEFAULT: '#3f4557',
+              foreground: '#e8dbcb',
+            },
+            content4: {
+              DEFAULT: '#293147',
+              foreground: '#e8dbcb',
+            },
+            default: {
+              DEFAULT: '#213151',
+              foreground: '#e8dbcb',
+            },
             accent: {
-              DEFAULT: '#6ee7b7',
-              foreground: '#0b0f0e',
+              DEFAULT: '#e8dbcb',
+              foreground: '#071330',
             },
             primary: {
-              DEFAULT: '#6ee7b7',
-              foreground: '#0b0f0e',
+              DEFAULT: '#5293b7',
+              foreground: '#071330',
             },
             secondary: {
-              DEFAULT: '#0ea5e9',
-              foreground: '#0f172a',
+              DEFAULT: '#52688f',
+              foreground: '#e8dbcb',
             },
           },
         },
