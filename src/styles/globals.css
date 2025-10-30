@@ -250,11 +250,11 @@ a {
 main {
   display: flex;
   flex-direction: column;
-  gap: clamp(0px, 0.5vw, 8px);
+  gap: clamp(8px, 2vw, 18px);
 }
 
 .hero {
-  padding: clamp(32px, 5vw, 48px) 0 12px;
+  padding: clamp(32px, 5vw, 48px) 0 8px;
 }
 
 .hero h1 {
@@ -313,11 +313,13 @@ main {
 }
 
 .section {
-  padding: clamp(18px, 3.5vw, 26px) 0;
+  padding: clamp(14px, 3vw, 22px) 0;
 }
 
 .section.alt {
   background: hsl(var(--heroui-panel));
+}
+
 .section > .container {
   display: flex;
   flex-direction: column;
