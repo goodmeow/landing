@@ -1,11 +1,6 @@
 {
   "name": "landing",
   "version": "1.0.0",
-  "packageManager": "npm@10",
-  "engines": {
-    "node": ">=20.0.0 <23",
-    "npm": ">=10"
-  },
   "scripts": {
     "build": "cd frontend && npm run build",
     "install": "cd frontend && npm install"
