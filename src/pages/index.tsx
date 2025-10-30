@@ -200,8 +200,7 @@ export default function IndexPage() {
   const ghostContentUrl =
     import.meta.env.VITE_GHOST_CONTENT_URL?.trim() || DEFAULT_GHOST_API_URL;
   const ghostContentKey =
-    import.meta.env.VITE_GHOST_CONTENT_KEY?.trim() ||
-    DEFAULT_GHOST_CONTENT_KEY;
+    import.meta.env.VITE_GHOST_CONTENT_KEY?.trim() || DEFAULT_GHOST_CONTENT_KEY;
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState<boolean>(
     Boolean(ghostContentKey),
@@ -458,10 +457,10 @@ export default function IndexPage() {
               <Button
                 as="a"
                 className="cta-accent"
-                color="primary"
+                color="default"
                 disableRipple={false}
                 href="#blog"
-                radius="lg"
+                radius="full"
                 size="md"
               >
                 Read the Blog

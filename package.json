@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node ./scripts/update-build-meta.mjs",
     "build": "tsc && vite build",
     "lint": "eslint --fix",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "version:meta": "node ./scripts/update-build-meta.mjs"
   },
   "dependencies": {
     "@heroui/button": "2.2.27",
