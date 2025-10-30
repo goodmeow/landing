@@ -49,3 +49,4 @@ deploy/ghost-smtp-backup.md
 
 # Node tooling
 node_modules/
+.cache/
