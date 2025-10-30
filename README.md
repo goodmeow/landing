@@ -13,6 +13,15 @@ Static landing page for `goodmeow.my.id`, built with React 19, Vite 7, Tailwind,
 - The landing page fetches latest posts from Ghost at runtime; ensure the Vite env variables (`VITE_GHOST_CONTENT_*`) are set in `.env.local` or your deployment.
 - For manual redeploys, re-run `npm run build` before the compose command so nginx serves the latest bundle.
 
+### Local Deployment
+- `make landing-local` — build, version, and run the landing container locally using `deploy/docker-compose.local.yml`, exposing `http://localhost:8088/`.
+- `make landing-local-ps` — show service status.
+- `make landing-local-logs` — follow logs for the landing service.
+- `make landing-local-down` — stop and remove the local stack.
+
+Notes:
+- The local override only publishes the container; production should use `deploy/docker-compose.yml` behind the TLS reverse proxy.
+
 ## Documentation
 - See `AGENTS.md` for the full contributor + operations guide (stack overview, Ghost integration, security notes).
 
