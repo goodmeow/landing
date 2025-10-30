@@ -328,7 +328,7 @@ function App() {
             </Button>
             <a href="#blog">Blog</a>
             <a href="#about">About</a>
-            <Button as="a" href="#contact" size="sm" color="primary" radius="lg" disableRipple={false}>
+            <Button as="a" href="#contact" size="sm" color="accent" radius="lg" disableRipple={false}>
               Contact
             </Button>
           </nav>
@@ -349,7 +349,7 @@ function App() {
               I build useful things on the daily basis and write about tech, productivity, and what I learn along the way.
             </p>
             <div className="cta">
-              <Button as="a" href="#blog" color="primary" size="md" radius="lg" disableRipple={false}>
+              <Button as="a" href="#blog" color="accent" size="md" radius="lg" disableRipple={false} className="cta-accent">
                 Read the Blog
               </Button>
             </div>

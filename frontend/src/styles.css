@@ -4,9 +4,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Tailwind v4: include HeroUI plugin and sources (after tailwind) */
+@plugin '../hero.js';
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:is(.dark *));
+
 /* Base */
-:root {
-  color-scheme: light;
+:root { color-scheme: light; }
+
+/* Explicit light mode variables so dark variables can override when toggled */
+.light {
+  /* Base */
+  --heroui-background: 209.52 91.3% 86.47%; /* #BDDDFC */
+  --heroui-foreground: 209.09 22.76% 28.43%; /* #384959 */
+  --heroui-panel: 0 0% 100%; /* #FFFFFF */
+  --heroui-border: 209.51 25.74% 53.53%; /* #6A89A7 */
+  --heroui-muted: 209.51 25.74% 53.53%; /* #6A89A7 */
+  /* Brand */
+  --heroui-primary: 209.51 25.74% 53.53%; /* #6A89A7 */
+  --heroui-primary-foreground: 0 0% 100%; /* #FFFFFF */
+  --heroui-accent: 210 80.3% 74.12%; /* #88BDF2 */
+  --heroui-accent-foreground: 209.09 22.76% 28.43%; /* #384959 */
 }
 
 :root[data-theme='dark'] {
@@ -58,8 +76,10 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: -0.01em;
 }
 .nav { display: flex; gap: 18px; align-items: center; }
-.nav a { opacity: 0.9; }
+.nav a { opacity: 0.9; transition: color 160ms ease, opacity 160ms ease, text-decoration-color 160ms ease; }
 .nav a:hover { opacity: 1; }
+.light .nav a:hover { color: hsl(var(--heroui-accent)); text-decoration: underline; text-underline-offset: 2px; }
+.dark .nav a:hover { color: hsl(var(--heroui-accent)); text-decoration: underline; text-underline-offset: 2px; }
 .theme-toggle {
   --nextui-border-opacity: 0.2;
   background: color-mix(in srgb, hsl(var(--heroui-background)) 75%, transparent);
@@ -91,6 +111,17 @@ a { color: inherit; text-decoration: none; }
 .lead { font-size: 18px; color: hsl(var(--heroui-muted)); }
 .cta { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
 
+/* CTA accent buttons: add mild glow on hover */
+.cta-accent { transition: transform 160ms ease, box-shadow 200ms ease; }
+.light .cta-accent:hover { 
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px color-mix(in srgb, hsl(var(--heroui-accent)) 35%, transparent);
+}
+.dark .cta-accent:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px color-mix(in srgb, hsl(var(--heroui-accent)) 28%, transparent);
+}
+
 /* Sections */
 .section { padding: 48px 0; }
 .section.alt { background: hsl(var(--heroui-panel)); }
@@ -100,8 +131,8 @@ a { color: inherit; text-decoration: none; }
 .section.contact { padding: 64px 0 80px; }
 .section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
 .section-head h2 { margin: 0; font-size: 22px; letter-spacing: -0.01em; }
-.see-all { color: hsl(var(--heroui-muted)); }
-.see-all:hover { color: hsl(var(--heroui-foreground)); }
+.see-all { color: hsl(var(--heroui-accent)); text-decoration: underline; text-underline-offset: 2px; }
+.see-all:hover { text-decoration-thickness: 2px; }
 
 /* Grid & cards */
 .grid {
@@ -134,7 +165,7 @@ a { color: inherit; text-decoration: none; }
   flex-direction: column;
 }
 .blog-card:focus-visible {
-  outline: 2px solid hsl(var(--heroui-primary));
+  outline: 2px solid hsl(var(--heroui-accent));
   outline-offset: 4px;
 }
 .blog-card-header {
@@ -181,20 +212,22 @@ a { color: inherit; text-decoration: none; }
 }
 .tags { display: flex; gap: 8px; flex-wrap: wrap; }
 .tag-chip {
-  background: color-mix(in srgb, hsl(var(--heroui-panel)) 70%, transparent);
-  color: hsl(var(--heroui-muted));
+  background: color-mix(in srgb, hsl(var(--heroui-panel)) 80%, transparent);
+  color: hsl(var(--heroui-accent));
+  border: 1px solid hsl(var(--heroui-accent));
   border-radius: var(--heroui-radius-pill);
 }
+.tag-chip:hover { background: color-mix(in srgb, hsl(var(--heroui-accent)) 10%, hsl(var(--heroui-panel))); }
 .blog-status {
   margin-top: 18px;
   color: hsl(var(--heroui-muted));
   text-align: center;
 }
 .blog-status a {
-  color: hsl(var(--heroui-primary));
+  color: hsl(var(--heroui-accent));
 }
 .links { display: flex; gap: 14px; }
-.links a { color: hsl(var(--heroui-primary)); }
+.links a { color: hsl(var(--heroui-accent)); }
 
 /* About */
 .about-card { background: color-mix(in srgb, hsl(var(--heroui-panel)) 92%, transparent); padding: 20px; border-radius: var(--heroui-radius-large); }
@@ -203,7 +236,7 @@ a { color: inherit; text-decoration: none; }
 .about-card-body { display: flex; flex-direction: column; gap: 14px; text-align: justify; }
 .about-card-body p { margin: 0; }
 .avatar-link { display: inline-flex; border-radius: 50%; line-height: 0; }
-.avatar-link:focus-visible { outline: 2px solid hsl(var(--heroui-primary)); outline-offset: 3px; }
+.avatar-link:focus-visible { outline: 2px solid hsl(var(--heroui-accent)); outline-offset: 3px; }
 .avatar {
   width: 90px; height: 90px; border-radius: 50%;
   background: center / cover no-repeat url('https://www.gravatar.com/avatar/3a273241dc4e42e7044c3fbc3ab24bf2?s=180&d=identicon');
@@ -301,6 +334,16 @@ a { color: inherit; text-decoration: none; }
 .contact-button:active {
   transform: translateY(1px) scale(0.99);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, hsl(var(--heroui-foreground)) 20%, transparent);
+}
+
+/* Light mode accents for border buttons to pop */
+.light .contact-button {
+  border-color: hsl(var(--heroui-accent)) !important;
+  color: hsl(var(--heroui-accent));
+}
+.light .contact-button:hover {
+  background: color-mix(in srgb, hsl(var(--heroui-accent)) 12%, hsl(var(--heroui-panel)));
+  border-color: hsl(var(--heroui-accent)) !important;
 }
 /* Footer */
 .site-footer {
