@@ -8,11 +8,6 @@ Static landing page for `goodmeow.my.id`, built with React 19, Vite 7, Tailwind,
 - `npm run build` — create a production bundle.
 - `make frontend-version` — stamp `<meta name="x-build">` with the current date+SHA, or `make frontend-sync` to clean, version, and build together.
 
-## Requirements
-- Node.js 20 LTS (tested with 20.18.0). Run `nvm use` to auto-select from `.nvmrc`.
-- npm 10 or newer. The repo sets `engine-strict=true` in `.npmrc`.
-- Install deps in `frontend/` using npm (no yarn/pnpm).
-
 ## Deployment
 - `docker compose -f deploy/docker-compose.yml up -d --force-recreate` — publish the current `dist/` via nginx (requires external `web` network).
 - The landing page fetches latest posts from Ghost at runtime; ensure the Vite env variables (`VITE_GHOST_CONTENT_*`) are set in `.env.local` or your deployment.
