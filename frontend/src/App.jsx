@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Button, Card, CardBody, CardHeader, Chip, Divider } from '@heroui/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider } from '@heroui/react'
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 
 
@@ -195,6 +195,8 @@ function App() {
     const root = document.documentElement
     root.dataset.theme = theme
     root.style.colorScheme = theme
+    root.classList.remove('light', 'dark')
+    root.classList.add(theme)
 
     if (typeof window !== 'undefined') {
       if (manual) {
@@ -388,20 +390,28 @@ function App() {
                   animate="visible"
                   transition={{ duration: 0.35, ease: 'easeOut', delay: index * 0.08 }}
                 >
-                  <CardBody className="blog-card-body">
-                    <h3>{post.title}</h3>
-                    <p className="muted">
-                      <time dateTime={post.isoDate ?? post.date}>{post.date}</time>
-                    </p>
-                    <p>{post.description}</p>
-                    <div className="tags">
-                      {post.tags.map((tag) => (
-                        <Chip key={tag} size="sm" variant="flat" className="tag-chip" radius="full">
-                          {tag}
-                        </Chip>
-                      ))}
+                  <CardHeader className="blog-card-header">
+                    <div className="blog-card-title">
+                      <h3>{post.title}</h3>
+                      <p className="muted blog-card-date">
+                        <time dateTime={post.isoDate ?? post.date}>{post.date}</time>
+                      </p>
                     </div>
+                  </CardHeader>
+                  <CardBody className="blog-card-body">
+                    <p className="blog-card-excerpt">{post.description}</p>
                   </CardBody>
+                  {post.tags.length > 0 && (
+                    <CardFooter className="blog-card-footer">
+                      <div className="tags">
+                        {post.tags.map((tag) => (
+                          <Chip key={tag} size="sm" variant="flat" className="tag-chip" radius="full">
+                            {tag}
+                          </Chip>
+                        ))}
+                      </div>
+                    </CardFooter>
+                  )}
                 </MotionCard>
               ))}
             </div>
