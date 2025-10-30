@@ -123,26 +123,6 @@ a { color: inherit; text-decoration: none; }
     padding: 0;
   }
 }
-.navbar-brand {
-  display: flex;
-  width: 100%;
-  justify-content: flex-start;
-}
-@media (max-width: 719px) {
-  .navbar-brand {
-    justify-content: center;
-  }
-}
-.brand {
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  font-size: 18px;
-}
-@media (max-width: 719px) {
-  .brand {
-    text-align: center;
-  }
-}
 .navbar-divider {
   width: 100%;
   height: 1px;
