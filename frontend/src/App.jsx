@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider } from '@heroui/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider, Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/react'
+import { NavButton } from './components/NavButton'
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 
 
@@ -308,17 +309,25 @@ function App() {
 
   return (
     <>
-      <header className="site-header">
-        <div className="container header-inner">
-          <a className="brand" href="#top">
-            goodmeow&apos;s blog
-          </a>
-          <nav className="nav" aria-label="Primary">
+      <Navbar
+        isBordered
+        classNames={{
+          base: 'navbar-overhead-base',
+          wrapper: 'container navbar-overhead-wrapper',
+          brand: 'navbar-overhead-brand',
+          content: 'navbar-overhead-content',
+        }}
+      >
+        <NavbarBrand>
+          <a className="brand-overhead" href="#top">goodmeow&apos;s blog</a>
+        </NavbarBrand>
+        <NavbarContent justify="end" className="navbar-overhead-actions">
+          <NavbarItem>
             <Button
               isIconOnly
-              variant="bordered"
-              size="sm"
-              radius="full"
+              variant="ghost"
+              size="md"
+              radius="md"
               className="theme-toggle"
               aria-label={`Switch to ${nextTheme} mode`}
               disableRipple={false}
@@ -326,14 +335,42 @@ function App() {
             >
               {theme === 'light' ? <MoonIcon aria-hidden="true" focusable="false" /> : <SunIcon aria-hidden="true" focusable="false" />}
             </Button>
-            <a href="#blog">Blog</a>
-            <a href="#about">About</a>
-            <Button as="a" href="#contact" size="sm" color="accent" radius="lg" disableRipple={false}>
+          </NavbarItem>
+        </NavbarContent>
+      </Navbar>
+
+      <Navbar
+        position="sticky"
+        shouldHideOnScroll
+        isBordered
+        classNames={{
+          base: 'navbar-base',
+          wrapper: 'container navbar-wrapper',
+          brand: 'navbar-brand',
+          content: 'navbar-section',
+        }}
+      >
+        <Divider className="navbar-divider" />
+
+        {/* Primary menu and actions */}
+        <NavbarContent justify="start" aria-label="Primary navigation" className="navbar-row">
+          <NavbarItem>
+            <NavButton as="a" href="#blog">
+              Blog
+            </NavButton>
+          </NavbarItem>
+          <NavbarItem>
+            <NavButton as="a" href="#about">
+              About
+            </NavButton>
+          </NavbarItem>
+          <NavbarItem>
+            <NavButton as="a" href="#contact">
               Contact
-            </Button>
-          </nav>
-        </div>
-      </header>
+            </NavButton>
+          </NavbarItem>
+        </NavbarContent>
+      </Navbar>
 
       <main>
         <MotionSection
