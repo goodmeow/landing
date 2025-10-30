@@ -60,9 +60,6 @@ Run inside `frontend/` unless stated.
 - For router-aware components, pass `navigate`/`useHref` implementations to `HeroUIProvider`; otherwise the default anchor usage suffices.
 - To disable ripples globally, the app sets `disableRipple` on `HeroUIProvider` in `frontend/src/main.jsx`.
 
-## Reference Links
-- HeroUI component docs content (source for examples and props): https://github.com/heroui-inc/heroui/tree/main/apps/docs/content/docs
-
 ## Quality Checks & Runbooks
 - Smoke test theme switching, blog cards, and contact CTAs in both dev (`npm run dev`) and preview (`make frontend-preview`) modes.
 - After `make frontend-version`, confirm the footer displays the new build string and that `index.html` has the updated `x-build` meta.
