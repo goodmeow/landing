@@ -15,6 +15,7 @@ import { NavButton } from "@/components/nav-button";
 const THEME_STORAGE_KEY = "gm-theme-preference";
 const DEFAULT_GHOST_API_URL =
   "https://blog.goodmeow.my.id/ghost/api/content/posts/";
+const DEFAULT_GHOST_CONTENT_KEY = "e7cb889602d27700ed32ade0c1";
 const MotionSection = motion.section;
 
 type ThemeMode = "light" | "dark";
@@ -198,7 +199,9 @@ export default function IndexPage() {
   const nextTheme: ThemeMode = theme === "light" ? "dark" : "light";
   const ghostContentUrl =
     import.meta.env.VITE_GHOST_CONTENT_URL?.trim() || DEFAULT_GHOST_API_URL;
-  const ghostContentKey = import.meta.env.VITE_GHOST_CONTENT_KEY?.trim() || "";
+  const ghostContentKey =
+    import.meta.env.VITE_GHOST_CONTENT_KEY?.trim() ||
+    DEFAULT_GHOST_CONTENT_KEY;
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState<boolean>(
     Boolean(ghostContentKey),
