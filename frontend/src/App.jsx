@@ -314,8 +314,6 @@ function App() {
         classNames={{
           base: 'navbar-overhead-base',
           wrapper: 'container navbar-overhead-wrapper',
-          brand: 'navbar-overhead-brand',
-          content: 'navbar-overhead-content',
         }}
       >
         <NavbarBrand>
@@ -346,8 +344,6 @@ function App() {
         classNames={{
           base: 'navbar-base',
           wrapper: 'container navbar-wrapper',
-          brand: 'navbar-brand',
-          content: 'navbar-section',
         }}
       >
         <Divider className="navbar-divider" />
