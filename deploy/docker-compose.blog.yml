@@ -1,0 +1,37 @@
+services:
+  blog_db:
+    image: mysql:8.4
+    container_name: blog_mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - ../blog_mysql:/var/lib/mysql
+    networks:
+      - default
+
+  blog:
+    image: ghost:5-alpine
+    container_name: blog_ghost
+    restart: unless-stopped
+    env_file:
+      - ./.env.blog
+    volumes:
+      - ../blog_content:/var/lib/ghost/content
+    depends_on:
+      blog_db:
+        condition: service_healthy
+    networks:
+      web:
+        aliases:
+          - blog
+      default: {}
+    expose:
+      - "2368"
+
+networks:
+  web:
+    external: true

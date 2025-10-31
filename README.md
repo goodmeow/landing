@@ -1,50 +1,38 @@
-# Vite & HeroUI Template
+# goodmeow.dev Landing
 
-This is a template for creating applications using Vite and HeroUI (v2).
+React + Vite landing page for [goodmeow.dev](https://goodmeow.dev). The app fetches the latest posts from Ghost at runtime, presents bio/contact sections, and surfaces the current build metadata.
 
-[Try it on CodeSandbox](https://githubbox.com/heroui-inc/vite-template)
+## Stack
+- React 18, TypeScript, Vite 6
+- HeroUI v2 components with Tailwind v4 utilities (`src/styles/globals.css`)
+- Framer Motion for subtle entrance animations
+- Ghost Content API for the “Latest Writing” section
 
-## Technologies Used
-
-- [Vite](https://vitejs.dev/guide/)
-- [HeroUI](https://heroui.com)
-- [Tailwind CSS](https://tailwindcss.com)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org)
-- [Framer Motion](https://www.framer.com/motion)
-
-## How to Use
-
-To clone the project, run the following command:
-
+## Getting Started
 ```bash
-git clone https://github.com/heroui-inc/vite-template.git
+npm install            # install dependencies
+npm run dev            # start Vite on http://localhost:5173
+npm run lint           # lint + autofix
+npm run version:meta   # manually refresh <meta name="x-build">
+npm run build          # type-check, version stamp, and emit dist/
+npm run preview        # serve the production bundle locally
 ```
 
-### Install dependencies
-
-You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
-
-```bash
-npm install
+Environment variables live in `.env.local` (see `.env.example`). At minimum set:
+```
+VITE_GHOST_CONTENT_URL=https://blog.goodmeow.my.id/ghost/api/content/posts/
+VITE_GHOST_CONTENT_KEY=<ghost-content-api-key>
 ```
 
-### Run the development server
+## Deployment Notes
+- `dist/` contains the static bundle; host via nginx, Vercel, or any static host.
+- The original Docker/nginx manifests remain under `deploy/` for reference (`docker compose -f deploy/docker-compose.yml up -d`).
+- `scripts/update-build-meta.mjs` runs automatically before `npm run build`, stamping `index.html` with `YYYY.MM.DD+<shortSHA>` so the footer shows the current deploy.
 
-```bash
-npm run dev
-```
-
-### Setup pnpm (optional)
-
-If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
-
-```bash
-public-hoist-pattern[]=*@heroui/*
-```
-
-After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
+## Additional Resources
+- Contributor & operations guide: [AGENTS.md](./AGENTS.md)
+- SEO assets: `public/robots.txt`, `public/site.webmanifest`, `public/sitemap.xml`
 
 ## License
-
-Licensed under the [MIT license](https://github.com/heroui-inc/vite-template/blob/main/LICENSE).
+- Application code is licensed under [MIT](./LICENSE).
+- Site content is licensed under [CC BY-SA 4.0](./LICENSE.md).

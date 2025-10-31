@@ -1,7 +1,7 @@
 {
-  "name": "vite-template",
+  "name": "goodmeow-landing",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,9 @@
     "build": "node ./scripts/update-build-meta.mjs && tsc && vite build",
     "lint": "eslint --fix",
     "preview": "vite preview",
-    "version:meta": "node ./scripts/update-build-meta.mjs"
+    "version:meta": "node ./scripts/update-build-meta.mjs",
+    "legacy:install": "cd frontend && npm install",
+    "legacy:build": "cd frontend && npm run build"
   },
   "dependencies": {
     "@heroui/button": "2.2.27",

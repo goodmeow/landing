@@ -1,0 +1,5 @@
+services:
+  landing:
+    # Local-only override to expose Nginx on host
+    ports:
+      - "8088:80"
