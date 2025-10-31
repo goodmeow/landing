@@ -173,6 +173,31 @@ const CredlyIcon: React.FC<IconProps> = ({
   </svg>
 );
 
+const LinktreeIcon: React.FC<IconProps> = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}) => (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    height={height ?? size}
+    viewBox="0 0 24 24"
+    width={width ?? size}
+    {...props}
+  >
+    <path
+      d="M12 2a1 1 0 0 0-.78.36l-6 7.2a1 1 0 1 0 1.56 1.28L11 7.36V22a1 1 0 1 0 2 0V7.36l4.22 3.48a1 1 0 0 0 1.56-1.28l-6-7.2A1 1 0 0 0 12 2Z"
+      fill="currentColor"
+    />
+    <path
+      d="m8.47 14.94-2.5 2.83a1 1 0 0 0 1.5 1.32l2.62-2.96a1 1 0 1 0-1.62-1.2Zm7.06 0a1 1 0 0 0-1.62 1.2l2.62 2.96a1 1 0 0 0 1.5-1.32Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
 function resolvePreferredTheme(): ThemeState {
   if (typeof window === "undefined") {
     return { theme: "dark", manual: false };
@@ -664,6 +689,18 @@ export default function IndexPage() {
                       variant="bordered"
                     >
                       LinkedIn
+                    </Button>
+                    <Button
+                      as="a"
+                      className="contact-button"
+                      disableRipple={false}
+                      href="https://linktr.ee/goodmeow"
+                      radius="full"
+                      size="lg"
+                      startContent={<LinktreeIcon size={18} />}
+                      variant="bordered"
+                    >
+                      Linktree
                     </Button>
                   </div>
                 </div>
