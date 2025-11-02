@@ -7,6 +7,10 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Ensure agent guides stay tracked
+!AGENTS.md
+!**/AGENTS.md
+
 # Node output
 node_modules
 .cache/
