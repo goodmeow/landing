@@ -17,12 +17,14 @@ import {
   LinkedinIcon,
   ProtonMailIcon,
 } from "@/components/contact-icons";
+import { ViewportSizeIndicator } from "@/components/viewport-size-indicator";
 
 const THEME_STORAGE_KEY = "gm-theme-preference";
 const DEFAULT_GHOST_API_URL =
   "https://blog.goodmeow.my.id/ghost/api/content/posts/";
 const DEFAULT_GHOST_CONTENT_KEY = "e7cb889602d27700ed32ade0c1";
 const MotionSection = motion.section;
+const IS_DEV = import.meta.env.DEV;
 
 type ThemeMode = "light" | "dark";
 
@@ -631,19 +633,23 @@ export default function IndexPage() {
               </svg>
               CC BY-SA 4.0
             </a>
-            · v
-            {commitInfo ? (
-              <a
-                aria-label={`View commit ${commitInfo.sha} on GitHub`}
-                href={commitInfo.url}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {version}
-              </a>
-            ) : (
-              <span>{version}</span>
-            )}
+            <span className="license-meta">
+              <span aria-hidden="true">·</span>
+              <span>v</span>
+              {commitInfo ? (
+                <a
+                  aria-label={`View commit ${commitInfo.sha} on GitHub`}
+                  href={commitInfo.url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {version}
+                </a>
+              ) : (
+                <span>{version}</span>
+              )}
+            </span>
+            {IS_DEV ? <ViewportSizeIndicator /> : null}
           </p>
         </div>
       </footer>

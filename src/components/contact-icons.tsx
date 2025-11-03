@@ -27,12 +27,7 @@ export function ProtonMailIcon({
   );
 }
 
-export function GithubIcon({
-  size = 24,
-  width,
-  height,
-  ...props
-}: IconProps) {
+export function GithubIcon({ size = 24, width, height, ...props }: IconProps) {
   return (
     <svg
       aria-hidden="true"
@@ -73,12 +68,7 @@ export function LinkedinIcon({
   );
 }
 
-export function CredlyIcon({
-  size = 24,
-  width,
-  height,
-  ...props
-}: IconProps) {
+export function CredlyIcon({ size = 24, width, height, ...props }: IconProps) {
   return (
     <svg
       aria-hidden="true"
@@ -123,4 +113,3 @@ export function LinktreeIcon({
     </svg>
   );
 }
-

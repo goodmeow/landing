@@ -693,3 +693,17 @@ main {
   font-size: 13px;
   font-weight: 600;
 }
+
+.viewport-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.license-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
