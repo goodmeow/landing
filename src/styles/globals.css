@@ -452,6 +452,7 @@ main {
     hsl(var(--heroui-foreground)) 88%,
     hsl(var(--heroui-muted))
   );
+  text-align: justify;
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
@@ -545,6 +546,7 @@ main {
 .about-card-body p {
   margin: 0;
   font-size: 15px;
+  text-align: justify;
 }
 
 .contact {
