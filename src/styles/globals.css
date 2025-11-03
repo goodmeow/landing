@@ -65,8 +65,25 @@ a {
 }
 
 .container {
-  width: min(1100px, calc(100% - 32px));
+  width: min(1320px, calc(100% - 64px));
   margin: 0 auto;
+}
+
+@media (max-width: 639px) {
+  .container {
+    width: calc(100% - 32px);
+  }
+}
+
+.navbar-shell {
+  width: min(1320px, calc(100% - 64px));
+  margin: 0 auto;
+}
+
+@media (max-width: 639px) {
+  .navbar-shell {
+    width: calc(100% - 32px);
+  }
 }
 
 .navbar-overhead-base {
@@ -474,6 +491,11 @@ main {
   background: color-mix(in srgb, hsl(var(--heroui-panel)) 80%, transparent);
   color: hsl(var(--heroui-accent));
   border: 1px solid hsl(var(--heroui-accent));
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  line-height: 1.2;
 }
 
 .tag-chip:hover {

@@ -291,7 +291,7 @@ export default function IndexPage() {
       <Navbar
         isBordered
         classNames={{
-          base: "navbar-overhead-base",
+          base: "navbar-overhead-base navbar-shell",
           wrapper: "container navbar-overhead-wrapper",
         }}
       >
@@ -326,7 +326,7 @@ export default function IndexPage() {
         isBordered
         shouldHideOnScroll
         classNames={{
-          base: "navbar-base",
+          base: "navbar-base navbar-shell",
           wrapper: "container navbar-wrapper",
         }}
         position="sticky"
