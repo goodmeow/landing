@@ -1,70 +1,47 @@
-# Repository Guidelines
+# goodmeow.dev Agent Guide
 
-## Overview & Stack
-- Single-page app built with React 19, Vite 7, Tailwind layers (`frontend/src/styles.css`), HeroUI components, and Framer Motion animations.
-- Static assets are produced in `frontend/dist/` and served by an `nginx:alpine` container defined in `deploy/docker-compose.yml`, fronted by a TLS reverse proxy (`deploy/nginx/goodmeow.conf`).
-- Ghost CMS powers `blog.goodmeow.my.id`; the landing page ingests the public RSS feed to populate latest posts.
+## Project Snapshot
+- Simple single-app repo: Vite + React 18 landed under `src/`, infra and scripts alongside.
+- TypeScript-first with HeroUI/Tailwind v4 styling and Ghost Content API integration.
+- Each major directory ships its own `AGENTS.md`; closest file wins when editing.
 
-## Project Structure & Module Organization
-- `frontend/` — main application; place components in `src/` and static files in `public/`.
-- `frontend/scripts/` — reserved for future automation utilities.
-- `scripts/` — operational helpers such as `update_build_meta.js`.
-- `deploy/` — Docker Compose manifests plus nginx configs for static hosting and reverse proxying.
-- `blog_content/`, `archive/` — Ghost volumes and historical assets; keep untouched unless refreshing staging content.
+## Root Setup Commands
+- `npm install` – install dependencies (root package only).
+- `npm run dev` – start Vite dev server on `http://localhost:5173`.
+- `npm run build` – stamps `index.html`, type-checks via `tsc`, and emits `dist/`.
+- `npm run lint` – ESLint with autofix; run before commits.
+- `npm run preview` – serve the last production build.
+- `npm run version:meta` – refresh the `x-build` meta tag without rebuilding.
 
-## Build, Test, and Development Commands
-Run inside `frontend/` unless stated.
-- `npm install` — install dependencies.
-- `npm run dev` — Vite dev server at `http://localhost:5173`.
-- `npm run build` — production bundle into `dist/`.
-- `npm run preview` — serve the built bundle locally.
-- `npm run lint` — ESLint flat config.
-- `make frontend-version` — update `<meta name="x-build">` to `YYYY.MM.DD+<shortSHA>`.
-- `make frontend-sync` — clean, version, and build in one go.
-- `make frontend-preview` — preview production build on `0.0.0.0:4173`.
+## Universal Conventions
+- TypeScript + React functional components, 2-space indent, imports ordered packages → `@/` aliases → relatives.
+- Tailwind utilities live in `src/styles/globals.css`; extend tokens through `tailwind.config.js` + `src/hero.js` together.
+- Keep lint disables rare and justified; rely on ESLint autofix where possible.
+- Commits stay short and imperative (e.g., `feat: add hero animation`); PRs list manual QA steps and screenshots for UI shifts.
 
-## Coding Style & Naming Conventions
-- Functional React components in PascalCase; hooks/utilities camelCase.
-- Two-space indentation, single quotes, wrap long JSX props onto new lines.
-- Prefer Tailwind primitives declared in `styles.css`; use inline styles only for theme toggles/accessibility fixes.
-- Run ESLint before commits; document any rule suppressions inline.
+## Security & Secrets
+- Never commit API keys or tokens; reference `.env.example` and keep secrets in `.env.local`.
+- Ghost credentials surface via `VITE_GHOST_CONTENT_URL` / `VITE_GHOST_CONTENT_KEY`; treat them as secrets.
+- PII should not enter the repo or logs; scrub sample data before sharing.
 
-## Testing Guidelines
-- No automated test suite yet; always run `npm run lint` and `npm run build` before PRs.
-- For interactive changes, describe manual test steps or include focused harnesses in `src/`.
-- If introducing Vitest (preferred), colocate specs next to components using `ComponentName.test.jsx`.
+## JIT Index (what to open, not what to paste)
 
-## Commit & Pull Request Guidelines
-- Follow existing Conventional Commit prefixes (`feat:`, `landing:`, `chore(meta):`); subjects ≤72 characters, lowercase.
-- Reference issues in the body; highlight RSS/config edits explicitly.
-- PRs need a concise summary, screenshots for UI changes, reviewer instructions, and preview URLs when available.
+### Directory Map
+- Web app source: `src/` → [see src/AGENTS.md](src/AGENTS.md)
+- Shared components: `src/components/` → [see src/components/AGENTS.md](src/components/AGENTS.md)
+- Routed pages: `src/pages/` → [see src/pages/AGENTS.md](src/pages/AGENTS.md)
+- Styling system: `src/styles/` → [see src/styles/AGENTS.md](src/styles/AGENTS.md)
+- Build scripts: `scripts/` → [see scripts/AGENTS.md](scripts/AGENTS.md)
+- Infra manifests: `deploy/` → [see deploy/AGENTS.md](deploy/AGENTS.md)
 
-## Content Sync & Configuration
-- The SPA fetches latest posts from Ghost at runtime via `VITE_GHOST_CONTENT_*`.
+### Quick Find Commands
+- `rg -n "export function" src` – enumerate exported React functions.
+- `rg -n "useState" src/pages` – inspect stateful page logic.
+- `rg -n "NavButton" -g'*.tsx' src` – locate component usage.
+- `rg -n "fetch(" src/pages/index.tsx` – review Ghost API access.
+- `rg -n "docker-compose" deploy` – scan compose manifests.
 
-## Key Artifacts & Branding
-- `frontend/index.html` holds document metadata, analytics, JSON-LD, and the `x-build` meta tag.
-- `frontend/src/App.jsx` defines hero copy, blog cards, about/contact sections, theme toggle, and footer license/version display.
-- Avatar references a Gravatar hash baked into `index.html`; update only with explicit branding changes.
-- Footer must continue to show the CC BY-SA 4.0 badge and link to the current build commit when available.
-
-## Deployment & Operations
-- Build locally (`npm run build`) or via CI; ensure `frontend/dist/` is up to date before redeploying.
-- Redeploy static hosting with `docker compose -f deploy/docker-compose.yml up -d --force-recreate`; requires the external `web` network.
-- TLS reverse proxy (`deploy/nginx/goodmeow.conf`) enforces CSP, HSTS, AI crawler blocks, and routes `/` to the landing container, `/blog/` to Ghost. Preserve security headers when editing.
-- Ghost CMS volumes live under `blog_content/` and `blog_mysql/`; keep backups before upgrades.
-
-## Operational Tips
-- If Ghost data needs to be pre-fetched for testing, implement a local script in `frontend/scripts/` as required.
-- When editing SEO/PWA assets (`robots.txt`, `sitemap.xml`, `site.webmanifest`, favicons), copy updates into `frontend/public/` so they ship with the bundle.
-- For router-aware components, pass `navigate`/`useHref` implementations to `HeroUIProvider`; otherwise the default anchor usage suffices.
-- To disable ripples globally, the app sets `disableRipple` on `HeroUIProvider` in `frontend/src/main.jsx`.
-
-## Quality Checks & Runbooks
-- Smoke test theme switching, blog cards, and contact CTAs in both dev (`npm run dev`) and preview (`make frontend-preview`) modes.
-- After `make frontend-version`, confirm the footer displays the new build string and that `index.html` has the updated `x-build` meta.
-- If Nginx config changes, validate with `nginx -t` inside the container or via `docker compose exec landing_www nginx -t` before reloads.
-
-## Contact
-- Primary email: `aarunalr@pm.me`.
-- Social links in `App.jsx` (GitHub, LinkedIn, Credly) should stay current; update only when instructed.
+## Definition of Done
+- `npm run lint` and `npm run build` succeed locally; address warnings.
+- Manual QA covers theme toggle, Ghost “Latest Writing” fetch, and footer build tag.
+- Update relevant `AGENTS.md` entries when adding patterns or commands.

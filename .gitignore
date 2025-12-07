@@ -1,11 +1,29 @@
-# Ignore local TODOs and exports
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Ensure agent guides stay tracked
+!AGENTS.md
+!**/AGENTS.md
+
+# Node output
+node_modules
+.cache/
+dist
+dist-ssr
 todo/
 
-# Ignore credentials/secrets under landing/
-# Common secret file patterns
+# Environment variables & secrets
+.env
+.env.local
+.env.*.local
+.env.*
 *.env
-*.env.local
-*.env.*.local
 *.secret
 *.secrets
 *.key
@@ -15,8 +33,6 @@ todo/
 *.pfx
 *.keystore
 *.jks
-
-# Specific paths inside this repo
 deploy/**/secrets*/
 deploy/**/certs*/
 deploy/**/keys*/
@@ -24,29 +40,33 @@ deploy/**/.env
 deploy/**/.env.*
 !deploy/.env.blog.example
 
-# Docker/compose overrides and local configs
+# Docker overrides
 docker-compose.override.yml
 deploy/docker-compose.override.yml
 
-# System/editor cruft
+# System/editor files
+!.vscode/extensions.json
+.idea
 .DS_Store
 *.swp
 *.swo
-*.log
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 # Archive and staging runtime data
 archive/
 blog_content/
 blog_mysql/
 
-# Local env for blog staging (kept out of VCS)
+# Local blog configs kept out of VCS
 deploy/.env.blog
-
-# Local agent notes
-Agent.md
-AGENTS.md
 deploy/ghost-smtp-backup.md
 
-# Node tooling
-node_modules/
-.cache/
+# Dependency locks (managed externally)
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+bun.lockb

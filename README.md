@@ -1,29 +1,38 @@
-# Landing React Build
+# goodmeow.dev Landing
 
-Static landing page for `goodmeow.my.id`, built with React 19, Vite 7, Tailwind, and HeroUI. The production bundle in `frontend/dist/` is served by an `nginx:alpine` container defined under `deploy/`.
+React + Vite landing page for [goodmeow.dev](https://goodmeow.dev). The app fetches the latest posts from Ghost at runtime, presents bio/contact sections, and surfaces the current build metadata.
 
-## Quick Start
-- `cd frontend && npm install` — install dependencies.
-- `npm run dev` — start Vite on `http://localhost:5173`.
-- `npm run build` — create a production bundle.
-- `make frontend-version` — stamp `<meta name="x-build">` with the current date+SHA, or `make frontend-sync` to clean, version, and build together.
+## Stack
+- React 18, TypeScript, Vite 6
+- HeroUI v2 components with Tailwind v4 utilities (`src/styles/globals.css`)
+- Framer Motion for subtle entrance animations
+- Ghost Content API for the “Latest Writing” section
 
-## Deployment
-- `docker compose -f deploy/docker-compose.yml up -d --force-recreate` — publish the current `dist/` via nginx (requires external `web` network).
-- The landing page fetches latest posts from Ghost at runtime; ensure the Vite env variables (`VITE_GHOST_CONTENT_*`) are set in `.env.local` or your deployment.
-- For manual redeploys, re-run `npm run build` before the compose command so nginx serves the latest bundle.
+## Getting Started
+```bash
+npm install            # install dependencies
+npm run dev            # start Vite on http://localhost:5173
+npm run lint           # lint + autofix
+npm run version:meta   # manually refresh <meta name="x-build">
+npm run build          # type-check, version stamp, and emit dist/
+npm run preview        # serve the production bundle locally
+```
 
-### Local Deployment
-- `make landing-local` — build, version, and run the landing container locally using `deploy/docker-compose.local.yml`, exposing `http://localhost:8088/`.
-- `make landing-local-ps` — show service status.
-- `make landing-local-logs` — follow logs for the landing service.
-- `make landing-local-down` — stop and remove the local stack.
+Environment variables live in `.env.local` (see `.env.example`). At minimum set:
+```
+VITE_GHOST_CONTENT_URL=https://blog.goodmeow.my.id/ghost/api/content/posts/
+VITE_GHOST_CONTENT_KEY=<ghost-content-api-key>
+```
 
-Notes:
-- The local override only publishes the container; production should use `deploy/docker-compose.yml` behind the TLS reverse proxy.
+## Deployment Notes
+- `dist/` contains the static bundle; host via nginx, Vercel, or any static host.
+- The original Docker/nginx manifests remain under `deploy/` for reference (`docker compose -f deploy/docker-compose.yml up -d`).
+- `scripts/update-build-meta.mjs` runs automatically before `npm run build`, stamping `index.html` with `YYYY.MM.DD+<shortSHA>` so the footer shows the current deploy.
 
-## Documentation
-- See `AGENTS.md` for the full contributor + operations guide (stack overview, Ghost integration, security notes).
+## Additional Resources
+- Contributor & operations guide: [AGENTS.md](./AGENTS.md)
+- SEO assets: `public/robots.txt`, `public/site.webmanifest`, `public/sitemap.xml`
 
 ## License
-- Content licensed under CC BY-SA 4.0 (`LICENSE.md`).
+- Application code is licensed under [MIT](./LICENSE).
+- Site content is licensed under [CC BY-SA 4.0](./LICENSE.md).
