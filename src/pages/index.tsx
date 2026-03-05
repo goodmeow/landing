@@ -414,17 +414,19 @@ export default function IndexPage() {
               </CardHeader>
               <CardBody className="about-card-body">
                 <p>
-                  Experienced Data Analyst with 3+ years in data-driven
-                  decision-making, cross-functional project management, and
-                  stakeholder collaboration. Passionate about leveraging
-                  Business Intelligence tools to solve challenges in market
-                  forecasting, supply chain optimization, and operational risk
-                  mitigation.
+                  IT Operations & Support professional with 1+ year of direct IT
+                  Operations experience, built on nearly 5 years in Data
+                  Analysis and Business Support.
                 </p>
                 <p>
-                  Certified in AWS Cloud, SCRUM, and data visualization
-                  (Tableau, SQL), with a proven ability to deliver actionable
-                  insights for strategic planning in dynamic industry.
+                  Currently driving day-to-day IT service reliability by
+                  managing L1/L2 incident resolution, proactively monitoring
+                  infrastructure and service performance, and orchestrating
+                  cross-functional and vendor coordination to safeguard uptime.
+                  Recognized for applying structured problem-solving and
+                  data-driven analysis to accelerate issue resolution, reduce
+                  service disruption risk, and strengthen operational discipline
+                  across IT environments.
                 </p>
               </CardBody>
             </Card>
