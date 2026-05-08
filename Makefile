@@ -19,7 +19,7 @@ frontend-clean:
 	rm -rf $(FRONTEND_DIR)/dist
 
 frontend-version:
-	NODE_ENV=production node scripts/update_build_meta.js
+	NODE_ENV=production node scripts/update-build-meta.mjs
 
 frontend-sync: frontend-install frontend-clean frontend-version frontend-build
 

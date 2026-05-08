@@ -67,7 +67,7 @@ function run() {
   try {
     const version = getVersion();
     const repoRoot = resolve(__dirname, "..");
-    const targets = [resolve(repoRoot, "index.html")];
+    const targets = [resolve(repoRoot, "frontend", "index.html")];
 
     let changed = false;
     for (const target of targets) {
