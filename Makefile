@@ -1,4 +1,4 @@
-FRONTEND_DIR := frontend
+FRONTEND_DIR := .
 
 # Prefer Docker Compose v2 plugin, fallback to v1 binary
 COMPOSE := $(shell docker compose version >/dev/null 2>&1 && echo "docker compose" || (command -v docker-compose >/dev/null 2>&1 && echo docker-compose || echo "docker compose"))
@@ -19,7 +19,7 @@ frontend-clean:
 	rm -rf $(FRONTEND_DIR)/dist
 
 frontend-version:
-	NODE_ENV=production node scripts/update_build_meta.js
+	NODE_ENV=production node scripts/update-build-meta.mjs
 
 frontend-sync: frontend-install frontend-clean frontend-version frontend-build
 
