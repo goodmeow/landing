@@ -18,5 +18,7 @@ User-agent: PerplexityBot
 Disallow: /
 User-agent: Bytespider
 Disallow: /
+User-agent: AmazonBot
+Disallow: /
 
 Sitemap: https://www.goodmeow.my.id/sitemap.xml

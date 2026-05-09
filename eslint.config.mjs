@@ -32,6 +32,7 @@ export default defineConfig([
     "public/*",
     "tests/*",
     "scripts/*",
+    "archive/*",
     "**/*.config.js",
     "**/.DS_Store",
     "**/node_modules",
