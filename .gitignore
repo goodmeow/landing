@@ -65,8 +65,7 @@ blog_mysql/
 deploy/.env.blog
 deploy/ghost-smtp-backup.md
 
-# Dependency locks (managed externally)
+# Alternative package manager locks
 pnpm-lock.yaml
 yarn.lock
-package-lock.json
 bun.lockb

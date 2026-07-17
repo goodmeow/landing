@@ -8,10 +8,11 @@
 ## Root Setup Commands
 - `npm install` – install dependencies (root package only).
 - `npm run dev` – start Vite dev server on `http://localhost:5173`.
-- `npm run build` – stamps `index.html`, type-checks via `tsc`, and emits `dist/`.
+- `npm run build` – type-checks via `tsc`, stamps `dist/index.html`, and emits `dist/`.
 - `npm run lint` – ESLint with autofix; run before commits.
 - `npm run preview` – serve the last production build.
-- `npm run version:meta` – refresh the `x-build` meta tag without rebuilding.
+- `make landing-local` – build and serve landing via nginx on `http://localhost:8088`.
+- `make stack-local` – run local production-like landing + Ghost + MySQL stack.
 
 ## Universal Conventions
 - TypeScript + React functional components, 2-space indent, imports ordered packages → `@/` aliases → relatives.

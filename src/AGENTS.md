@@ -1,13 +1,13 @@
 # src Agent Guide
 
 ## Package Identity
-- Main goodmeow.dev landing app using React 18, Vite 6, and HeroUI with Tailwind v4 tokens.
+- Main goodmeow.dev landing app using React 18, Vite 7, and HeroUI with Tailwind v4 tokens.
 - TypeScript everywhere (`.ts`/`.tsx`) with path alias imports via `@/` mapping to this folder.
 
 ## Setup & Run
 - `npm install` (run at repo root).
 - `npm run dev` – Vite dev server with hot reload.
-- `npm run build` – stamps `index.html`, type-checks, and bundles.
+- `npm run build` – type-checks, stamps `dist/index.html`, and bundles.
 - `npm run preview` – serve the production build for smoke tests.
 - `npm run lint` – ESLint autofix across the source tree.
 

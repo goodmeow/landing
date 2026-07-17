@@ -24,7 +24,6 @@ import { useThemePreference } from "@/hooks/use-theme-preference";
 
 const DEFAULT_GHOST_API_URL =
   "https://blog.goodmeow.my.id/ghost/api/content/posts/";
-const DEFAULT_GHOST_CONTENT_KEY = "***REDACTED***";
 const MotionSection = motion.section;
 const IS_DEV = import.meta.env.DEV;
 
@@ -71,8 +70,7 @@ export default function IndexPage() {
   const { theme, nextTheme, toggleTheme } = useThemePreference();
   const ghostContentUrl =
     import.meta.env.VITE_GHOST_CONTENT_URL?.trim() || DEFAULT_GHOST_API_URL;
-  const ghostContentKey =
-    import.meta.env.VITE_GHOST_CONTENT_KEY?.trim() || DEFAULT_GHOST_CONTENT_KEY;
+  const ghostContentKey = import.meta.env.VITE_GHOST_CONTENT_KEY?.trim() ?? "";
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState<boolean>(
     Boolean(ghostContentKey),
