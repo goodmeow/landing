@@ -35,6 +35,7 @@ make stack-local-down  # stop the local landing and blog stacks
 ```bash
 docker network create web
 ```
+The Makefile uses separate Compose project names for landing and blog so each stack can be recreated without orphan-container warnings.
 
 ## Deployment Notes
 - `dist/` contains the static bundle; host via nginx, Vercel, or any static host.

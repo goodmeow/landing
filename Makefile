@@ -1,4 +1,6 @@
 FRONTEND_DIR := .
+LANDING_PROJECT := landing
+BLOG_PROJECT := blog
 
 # Prefer Docker Compose v2 plugin, fallback to v1 binary
 COMPOSE := $(shell docker compose version >/dev/null 2>&1 && echo "docker compose" || (command -v docker-compose >/dev/null 2>&1 && echo docker-compose || echo "docker compose"))
@@ -23,42 +25,42 @@ frontend-clean:
 frontend-sync: frontend-install frontend-clean frontend-build
 
 landing-deploy:
-	$(COMPOSE) -f deploy/docker-compose.yml up -d --force-recreate
+	$(COMPOSE) -p $(LANDING_PROJECT) -f deploy/docker-compose.yml up -d --force-recreate
 
 blog-deploy:
-	$(COMPOSE) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog up -d --force-recreate
+	$(COMPOSE) -p $(BLOG_PROJECT) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog up -d --force-recreate
 
 # Local-only deployment exposing Nginx on host (see deploy/docker-compose.local.yml)
 landing-local: frontend-sync
-	$(COMPOSE) -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml up -d --force-recreate
+	$(COMPOSE) -p $(LANDING_PROJECT) -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml up -d --force-recreate
 
 blog-local:
-	$(COMPOSE) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog up -d --force-recreate
+	$(COMPOSE) -p $(BLOG_PROJECT) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog up -d --force-recreate
 
 stack-local: landing-local blog-local
 
 landing-local-down:
-	$(COMPOSE) -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml down
+	$(COMPOSE) -p $(LANDING_PROJECT) -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml down
 
 blog-local-down:
-	$(COMPOSE) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog down
+	$(COMPOSE) -p $(BLOG_PROJECT) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog down
 
 stack-local-down: landing-local-down blog-local-down
 
 landing-local-logs:
-	$(COMPOSE) -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml logs -f landing
+	$(COMPOSE) -p $(LANDING_PROJECT) -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml logs -f landing
 
 blog-local-logs:
-	$(COMPOSE) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog logs -f blog blog_db
+	$(COMPOSE) -p $(BLOG_PROJECT) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog logs -f blog blog_db
 
 stack-local-logs:
-	$(COMPOSE) -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml logs -f landing
-	$(COMPOSE) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog logs -f blog blog_db
+	$(COMPOSE) -p $(LANDING_PROJECT) -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml logs -f landing
+	$(COMPOSE) -p $(BLOG_PROJECT) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog logs -f blog blog_db
 
 landing-local-ps:
-	$(COMPOSE) -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml ps
+	$(COMPOSE) -p $(LANDING_PROJECT) -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml ps
 
 blog-local-ps:
-	$(COMPOSE) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog ps
+	$(COMPOSE) -p $(BLOG_PROJECT) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog ps
 
 stack-local-ps: landing-local-ps blog-local-ps

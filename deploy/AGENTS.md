@@ -16,6 +16,7 @@
 - ✅ DO update `deploy/nginx/site.conf` for the static landing container; `deploy/nginx/goodmeow.old-template.conf` is a legacy reverse-proxy template, not the live prod config.
 - ❌ DON'T commit secrets into `.env.blog`; rely on local files ignored by git.
 - ✅ Maintain external network references (`web`)—they assume Traefik/Reverse-proxy orchestration in production.
+- ✅ Keep landing and blog under separate Compose project names via the Makefile to avoid orphan cleanup crossing stacks.
 - ✅ Document any new compose services in PRs so infra partners stay aligned.
 
 ## Touch Points / Key Files
