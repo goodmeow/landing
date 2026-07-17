@@ -320,52 +320,49 @@ export default function IndexPage() {
                   }}
                   variants={blogCardVariants}
                 >
-                  <a
+                  <Card
+                    isPressable
                     aria-label={`Read ${post.title}`}
-                    className="blog-card-link"
+                    as="a"
+                    className="blog-card blog-card-link"
+                    disableRipple={false}
                     href={post.url}
+                    radius="lg"
                     rel="noopener noreferrer"
+                    shadow="sm"
                     target="_blank"
                   >
-                    <Card
-                      isPressable
-                      className="blog-card"
-                      disableRipple={false}
-                      radius="lg"
-                      shadow="sm"
-                    >
-                      <CardHeader className="blog-card-header">
-                        <div className="blog-card-title">
-                          <h3>{post.title}</h3>
-                          <p className="muted blog-card-date">
-                            <time dateTime={post.isoDate ?? post.date}>
-                              {post.date}
-                            </time>
-                          </p>
+                    <CardHeader className="blog-card-header">
+                      <div className="blog-card-title">
+                        <h3>{post.title}</h3>
+                        <p className="muted blog-card-date">
+                          <time dateTime={post.isoDate ?? post.date}>
+                            {post.date}
+                          </time>
+                        </p>
+                      </div>
+                    </CardHeader>
+                    <CardBody className="blog-card-body">
+                      <p className="blog-card-excerpt">{post.description}</p>
+                    </CardBody>
+                    {post.tags.length > 0 && (
+                      <CardFooter className="blog-card-footer">
+                        <div className="tags">
+                          {post.tags.map((tag) => (
+                            <Chip
+                              key={tag}
+                              className="tag-chip"
+                              radius="full"
+                              size="sm"
+                              variant="flat"
+                            >
+                              {tag}
+                            </Chip>
+                          ))}
                         </div>
-                      </CardHeader>
-                      <CardBody className="blog-card-body">
-                        <p className="blog-card-excerpt">{post.description}</p>
-                      </CardBody>
-                      {post.tags.length > 0 && (
-                        <CardFooter className="blog-card-footer">
-                          <div className="tags">
-                            {post.tags.map((tag) => (
-                              <Chip
-                                key={tag}
-                                className="tag-chip"
-                                radius="full"
-                                size="sm"
-                                variant="flat"
-                              >
-                                {tag}
-                              </Chip>
-                            ))}
-                          </div>
-                        </CardFooter>
-                      )}
-                    </Card>
-                  </a>
+                      </CardFooter>
+                    )}
+                  </Card>
                 </motion.div>
               ))}
             </div>

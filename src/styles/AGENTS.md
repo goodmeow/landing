@@ -10,7 +10,7 @@
 - `npm run lint` – catches unused classes via ESLint Tailwind rules in JSX.
 
 ## Patterns & Conventions
-- ✅ DO extend themes via `tailwind.config.js` + `src/hero.js` together; `src/styles/globals.css` references both through `@config` and `@plugin`.
+- ✅ DO extend HeroUI themes in `src/hero.js`; `tailwind.config.js` stays limited to scan paths and Tailwind-level settings.
 - ✅ DO define reusable utility classes (e.g., `.navbar-overhead-base`) when multiple components share styling.
 - ✅ Prefer CSS custom properties for theming like the `--heroui-*` variables declared at the top of `globals.css`.
 - ❌ DON'T hardcode colors in components; add tokens in `src/hero.js` and consume via `hsl(var(--token))`.
@@ -20,7 +20,7 @@
 ## Touch Points / Key Files
 - Global Tailwind layers and overrides: `src/styles/globals.css`
 - HeroUI token source: `src/hero.js`
-- Root Tailwind config: `tailwind.config.js`
+- Root Tailwind config: `tailwind.config.js` (content/dark mode only)
 
 ## JIT Index Hints
 - `rg -n "@media" src/styles/globals.css` – find responsive rules.
@@ -30,7 +30,7 @@
 ## Common Gotchas
 - Keep `@config` and relative paths accurate; moving files breaks Tailwind resolution.
 - Tailwind v4 purges aggressively—ensure class names appear in JSX or add `@source` entries.
-- Avoid duplicating HeroUI color tokens; update both light and dark theme blocks.
+- Avoid duplicating HeroUI plugin/theme config outside `src/hero.js`.
 
 ## Pre-PR Checks
 - `npm run build`
