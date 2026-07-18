@@ -45,6 +45,7 @@ docker-compose.override.yml
 deploy/docker-compose.override.yml
 
 # System/editor files
+.vscode/
 !.vscode/extensions.json
 .idea
 .DS_Store
