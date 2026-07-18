@@ -1,6 +1,6 @@
 # goodmeow.dev Landing
 
-React + Vite landing page for [goodmeow.dev](https://goodmeow.dev). The app fetches the latest posts from Ghost at runtime, presents bio/contact sections, and surfaces the current build metadata.
+React + Vite landing page for the goodmeow.dev brand at [goodmeow.my.id](https://www.goodmeow.my.id/). The app fetches the latest posts from Ghost at runtime, presents bio/contact sections, and surfaces the current build metadata.
 
 ## Stack
 - React 18, TypeScript, Vite 7

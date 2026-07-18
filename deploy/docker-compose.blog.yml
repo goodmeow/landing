@@ -19,7 +19,7 @@ services:
       - default
 
   blog:
-    image: ghost:5-alpine
+    image: ghost:6.52.1-alpine
     container_name: blog_ghost
     restart: unless-stopped
     env_file:

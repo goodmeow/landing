@@ -270,10 +270,11 @@ export default function IndexPage() {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <div className="container">
-            <h1>Longlife Learner, Developer, &amp; Writer</h1>
+            <h1>IT Operations, Monitoring, and Developer Notes</h1>
             <p className="lead">
-              I build useful things on the daily basis and write about tech,
-              productivity, and what I learn along the way.
+              goodmeow.dev is the personal notebook of Harun Al Rasyid, covering
+              infrastructure reliability, Docker, Linux, monitoring, automation,
+              and lessons from day-to-day IT operations work.
             </p>
             <div className="cta">
               <Button
@@ -422,6 +423,12 @@ export default function IndexPage() {
                   data-driven analysis to accelerate issue resolution, reduce
                   service disruption risk, and strengthen operational discipline
                   across IT environments.
+                </p>
+                <p>
+                  This site collects practical notes on monitoring, incident
+                  response, Linux servers, Docker deployments, and automation
+                  patterns that are useful for keeping small production systems
+                  understandable and reliable.
                 </p>
               </CardBody>
             </Card>

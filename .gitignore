@@ -60,6 +60,7 @@ deploy/docker-compose.override.yml
 archive/
 blog_content/
 blog_mysql/
+backups/
 
 # Local blog configs kept out of VCS
 deploy/.env.blog
