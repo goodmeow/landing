@@ -6,8 +6,21 @@ import { Button } from "@heroui/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 import { Divider } from "@heroui/divider";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/navbar";
-import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+import { Kbd } from "@heroui/kbd";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarMenuToggle,
+} from "@heroui/navbar";
+import {
+  MagnifyingGlassIcon,
+  MoonIcon,
+  SunIcon,
+} from "@heroicons/react/24/outline";
 
 import { CurrentTime } from "@/components/current-time";
 import { NavButton } from "@/components/nav-button";
@@ -26,6 +39,11 @@ const DEFAULT_GHOST_API_URL =
   "https://blog.goodmeow.my.id/ghost/api/content/posts/";
 const MotionSection = motion.section;
 const IS_DEV = import.meta.env.DEV;
+const NAV_ITEMS = [
+  { label: "Blog", href: "#blog" },
+  { label: "About", href: "#about" },
+  { label: "Contact", href: "#contact" },
+];
 
 type BlogPost = {
   title: string;
@@ -67,10 +85,11 @@ function normaliseTags(
 
 export default function IndexPage() {
   const { version, commitInfo } = useBuildInfo();
-  const { theme, nextTheme, toggleTheme } = useThemePreference();
+  const { theme, setTheme } = useThemePreference();
   const ghostContentUrl =
     import.meta.env.VITE_GHOST_CONTENT_URL?.trim() || DEFAULT_GHOST_API_URL;
   const ghostContentKey = import.meta.env.VITE_GHOST_CONTENT_KEY?.trim() ?? "";
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState<boolean>(
     Boolean(ghostContentKey),
@@ -84,6 +103,8 @@ export default function IndexPage() {
     }),
     [],
   );
+
+  const closeMenu = () => setIsMenuOpen(false);
 
   useEffect(() => {
     if (!ghostContentKey) {
@@ -190,75 +211,140 @@ export default function IndexPage() {
     <>
       <Navbar
         isBordered
-        classNames={{
-          base: "navbar-overhead-base",
-          wrapper: "container navbar-overhead-wrapper",
-        }}
-      >
-        <NavbarBrand>
-          <a className="brand-overhead" href="#top">
-            goodmeow&apos;s blog
-          </a>
-        </NavbarBrand>
-        <NavbarContent className="navbar-overhead-actions" justify="end">
-          <NavbarItem className="theme-toggle-stack">
-            <Button
-              isIconOnly
-              aria-label={`Switch to ${nextTheme} mode`}
-              className="theme-toggle"
-              disableRipple={false}
-              radius="md"
-              size="md"
-              variant="ghost"
-              onPress={toggleTheme}
-            >
-              {theme === "light" ? (
-                <MoonIcon aria-hidden="true" focusable="false" />
-              ) : (
-                <SunIcon aria-hidden="true" focusable="false" />
-              )}
-            </Button>
-          </NavbarItem>
-        </NavbarContent>
-      </Navbar>
-
-      <Navbar
-        isBordered
         shouldHideOnScroll
         classNames={{
           base: "navbar-base",
-          wrapper: "container navbar-wrapper",
+          wrapper: "container docs-navbar-wrapper",
+          menu: "docs-navbar-menu",
+          menuItem: "docs-navbar-menu-item",
         }}
+        isMenuOpen={isMenuOpen}
         position="sticky"
+        onMenuOpenChange={setIsMenuOpen}
       >
-        <Divider className="navbar-divider" />
-
+        <NavbarContent className="docs-navbar-toggle" justify="start">
+          <NavbarMenuToggle aria-label="Toggle navigation menu" />
+        </NavbarContent>
+        <NavbarBrand className="docs-navbar-brand">
+          <a className="brand-overhead" href="#top" onClick={closeMenu}>
+            <span className="brand-mark">gm</span>
+            <span className="brand-copy">
+              <span>goodmeow.dev</span>
+              <small>ops notes</small>
+            </span>
+          </a>
+        </NavbarBrand>
         <NavbarContent
           aria-label="Primary navigation"
-          className="navbar-row"
-          justify="start"
+          className="docs-navbar-links"
+          justify="center"
         >
-          <NavbarItem>
-            <NavButton as="a" href="#blog">
-              Blog
-            </NavButton>
-          </NavbarItem>
-          <NavbarItem>
-            <NavButton as="a" href="#about">
-              About
-            </NavButton>
-          </NavbarItem>
-          <NavbarItem>
-            <NavButton as="a" href="#contact">
-              Contact
-            </NavButton>
-          </NavbarItem>
+          {NAV_ITEMS.map((item) => (
+            <NavbarItem key={item.href}>
+              <NavButton as="a" href={item.href}>
+                {item.label}
+              </NavButton>
+            </NavbarItem>
+          ))}
         </NavbarContent>
-        <NavbarContent className="navbar-clock" justify="end">
-          <NavbarItem className="navbar-clock-item">
+        <NavbarContent className="docs-navbar-tools" justify="end">
+          <NavbarItem>
+            <a className="docs-search" href="#blog">
+              <MagnifyingGlassIcon aria-hidden="true" focusable="false" />
+              <span>Search writing</span>
+              <Kbd className="docs-search-kbd" keys={[]}>
+                /
+              </Kbd>
+            </a>
+          </NavbarItem>
+          <NavbarItem>
+            <div aria-label="Theme" className="theme-segment" role="group">
+              <Button
+                isIconOnly
+                aria-label="Use light mode"
+                aria-pressed={theme === "light"}
+                className="theme-toggle"
+                data-active={theme === "light"}
+                radius="md"
+                size="sm"
+                variant="light"
+                onPress={() => setTheme("light")}
+              >
+                <SunIcon aria-hidden="true" focusable="false" />
+              </Button>
+              <Button
+                isIconOnly
+                aria-label="Use dark mode"
+                aria-pressed={theme === "dark"}
+                className="theme-toggle"
+                data-active={theme === "dark"}
+                radius="md"
+                size="sm"
+                variant="light"
+                onPress={() => setTheme("dark")}
+              >
+                <MoonIcon aria-hidden="true" focusable="false" />
+              </Button>
+            </div>
+          </NavbarItem>
+          <NavbarItem className="docs-navbar-clock">
             <CurrentTime className="theme-clock" />
           </NavbarItem>
         </NavbarContent>
+        <NavbarMenu>
+          {NAV_ITEMS.map((item) => (
+            <NavbarMenuItem key={item.href}>
+              <a
+                className="docs-menu-link"
+                href={item.href}
+                onClick={closeMenu}
+              >
+                {item.label}
+              </a>
+            </NavbarMenuItem>
+          ))}
+          <NavbarMenuItem>
+            <a className="docs-menu-search" href="#blog" onClick={closeMenu}>
+              <MagnifyingGlassIcon aria-hidden="true" focusable="false" />
+              <span>Search writing</span>
+              <Kbd className="docs-search-kbd" keys={[]}>
+                /
+              </Kbd>
+            </a>
+          </NavbarMenuItem>
+          <NavbarMenuItem>
+            <div
+              aria-label="Theme"
+              className="theme-segment theme-segment-mobile"
+              role="group"
+            >
+              <Button
+                aria-pressed={theme === "light"}
+                className="theme-toggle theme-toggle-labeled"
+                data-active={theme === "light"}
+                radius="md"
+                size="sm"
+                startContent={<SunIcon aria-hidden="true" focusable="false" />}
+                variant="light"
+                onPress={() => setTheme("light")}
+              >
+                Light
+              </Button>
+              <Button
+                aria-pressed={theme === "dark"}
+                className="theme-toggle theme-toggle-labeled"
+                data-active={theme === "dark"}
+                radius="md"
+                size="sm"
+                startContent={<MoonIcon aria-hidden="true" focusable="false" />}
+                variant="light"
+                onPress={() => setTheme("dark")}
+              >
+                Dark
+              </Button>
+            </div>
+          </NavbarMenuItem>
+        </NavbarMenu>
       </Navbar>
 
       <main>
