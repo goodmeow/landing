@@ -6,7 +6,6 @@ import { Button } from "@heroui/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 import { Divider } from "@heroui/divider";
-import { Kbd } from "@heroui/kbd";
 import {
   Navbar,
   NavbarBrand,
@@ -223,7 +222,10 @@ export default function IndexPage() {
         onMenuOpenChange={setIsMenuOpen}
       >
         <NavbarContent className="docs-navbar-toggle" justify="start">
-          <NavbarMenuToggle aria-label="Toggle navigation menu" />
+          <NavbarMenuToggle
+            aria-expanded={isMenuOpen}
+            aria-label="Toggle navigation menu"
+          />
         </NavbarContent>
         <NavbarBrand className="docs-navbar-brand">
           <a className="brand-overhead" href="#top" onClick={closeMenu}>
@@ -251,10 +253,7 @@ export default function IndexPage() {
           <NavbarItem>
             <a className="docs-search" href="#blog">
               <MagnifyingGlassIcon aria-hidden="true" focusable="false" />
-              <span>Search writing</span>
-              <Kbd className="docs-search-kbd" keys={[]}>
-                /
-              </Kbd>
+              <span>Browse posts</span>
             </a>
           </NavbarItem>
           <NavbarItem>
@@ -306,10 +305,7 @@ export default function IndexPage() {
           <NavbarMenuItem>
             <a className="docs-menu-search" href="#blog" onClick={closeMenu}>
               <MagnifyingGlassIcon aria-hidden="true" focusable="false" />
-              <span>Search writing</span>
-              <Kbd className="docs-search-kbd" keys={[]}>
-                /
-              </Kbd>
+              <span>Browse posts</span>
             </a>
           </NavbarMenuItem>
           <NavbarMenuItem>
