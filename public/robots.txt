@@ -2,4 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.goodmeow.my.id/sitemap.xml
-Sitemap: https://blog.goodmeow.my.id/sitemap.xml

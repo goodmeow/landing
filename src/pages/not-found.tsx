@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
@@ -17,6 +18,10 @@ const IS_DEV = import.meta.env.DEV;
 export default function NotFoundPage() {
   const { version, commitInfo } = useBuildInfo();
   const { theme, nextTheme, toggleTheme } = useThemePreference();
+
+  useEffect(() => {
+    document.title = "Page Not Found | goodmeow.dev";
+  }, []);
 
   return (
     <>

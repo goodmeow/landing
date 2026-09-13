@@ -496,25 +496,31 @@ export default function IndexPage() {
               </CardHeader>
               <CardBody className="about-card-body">
                 <p>
-                  IT Operations & Support professional with 1+ year of direct IT
-                  Operations experience, built on nearly 5 years in Data
-                  Analysis and Business Support.
+                  IT Infrastructure Engineer with hands-on Data Center and
+                  enterprise networking experience — currently serving as the
+                  infrastructure focal point for a corporate office building,
+                  driving day-to-day IT operations and enterprise network
+                  implementation.
                 </p>
                 <p>
-                  Currently driving day-to-day IT service reliability by
-                  managing L1/L2 incident resolution, proactively monitoring
-                  infrastructure and service performance, and orchestrating
-                  cross-functional and vendor coordination to safeguard uptime.
-                  Recognized for applying structured problem-solving and
-                  data-driven analysis to accelerate issue resolution, reduce
-                  service disruption risk, and strengthen operational discipline
-                  across IT environments.
+                  Designed and implemented MikroTik CRS354 as the Data Center
+                  Layer-3 routing platform, integrating Hyper-V infrastructure,
+                  enterprise servers, and FortiGate 401F. Planned and executed
+                  VLAN segmentation, IP addressing, gateway migration, and
+                  inter-VLAN routing. Collaborated on Cisco Catalyst 9300 and
+                  Aruba CX switching deployment.
                 </p>
                 <p>
-                  This site collects practical notes on monitoring, incident
-                  response, Linux servers, Docker deployments, and automation
-                  patterns that are useful for keeping small production systems
-                  understandable and reliable.
+                  Deployed Zabbix monitoring on Ubuntu Linux with SLA
+                  availability reporting, built Windows DNS Split-DNS
+                  architecture, and administered Microsoft 365 services
+                  including Exchange Online, Purview, and eDiscovery.
+                </p>
+                <p>
+                  This site collects practical notes on MikroTik routing,
+                  FortiGate, monitoring, incident response, Docker, Linux
+                  servers, and automation patterns useful for keeping production
+                  systems understandable and reliable.
                 </p>
               </CardBody>
             </Card>
