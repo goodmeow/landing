@@ -16,9 +16,11 @@ import {
   NavbarMenuToggle,
 } from "@heroui/navbar";
 import {
+  Bars3Icon,
   MagnifyingGlassIcon,
   MoonIcon,
   SunIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 
 import { CurrentTime } from "@/components/current-time";
@@ -225,6 +227,13 @@ export default function IndexPage() {
           <NavbarMenuToggle
             aria-expanded={isMenuOpen}
             aria-label="Toggle navigation menu"
+            icon={(open: boolean) =>
+              open ? (
+                <XMarkIcon className="h-5 w-5" />
+              ) : (
+                <Bars3Icon className="h-5 w-5" />
+              )
+            }
           />
         </NavbarContent>
         <NavbarBrand className="docs-navbar-brand">
