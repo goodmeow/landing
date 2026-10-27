@@ -71,3 +71,4 @@ deploy/ghost-smtp-backup.md
 pnpm-lock.yaml
 yarn.lock
 bun.lockb
+dogfood-output/
