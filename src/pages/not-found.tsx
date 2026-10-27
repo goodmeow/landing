@@ -4,11 +4,11 @@ import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
 import { Divider } from "@heroui/divider";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/navbar";
-import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
 import { CurrentTime } from "@/components/current-time";
 import { SiteFooter } from "@/components/site-footer";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { useThemePreference } from "@/hooks/use-theme-preference";
 
 const MotionSection = motion.section;
@@ -41,34 +41,7 @@ export default function NotFoundPage() {
         </NavbarContent>
         <NavbarContent className="navbar-overhead-actions" justify="end">
           <NavbarItem className="theme-toggle-stack">
-            <div aria-label="Theme" className="theme-segment" role="group">
-              <Button
-                isIconOnly
-                aria-label="Use light mode"
-                aria-pressed={theme === "light"}
-                className="theme-toggle"
-                data-active={theme === "light"}
-                radius="md"
-                size="sm"
-                variant="light"
-                onPress={() => setTheme("light")}
-              >
-                <SunIcon aria-hidden="true" focusable="false" />
-              </Button>
-              <Button
-                isIconOnly
-                aria-label="Use dark mode"
-                aria-pressed={theme === "dark"}
-                className="theme-toggle"
-                data-active={theme === "dark"}
-                radius="md"
-                size="sm"
-                variant="light"
-                onPress={() => setTheme("dark")}
-              >
-                <MoonIcon aria-hidden="true" focusable="false" />
-              </Button>
-            </div>
+            <ThemeToggle theme={theme} onThemeChange={setTheme} />
           </NavbarItem>
         </NavbarContent>
       </Navbar>

@@ -18,8 +18,6 @@ import {
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
-  MoonIcon,
-  SunIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 
@@ -33,6 +31,7 @@ import {
   ProtonMailIcon,
 } from "@/components/contact-icons";
 import { SiteFooter } from "@/components/site-footer";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { useThemePreference } from "@/hooks/use-theme-preference";
 import { parseGhostPosts, type BlogPost } from "@/lib/ghost";
 
@@ -192,34 +191,7 @@ export default function IndexPage() {
             </a>
           </NavbarItem>
           <NavbarItem>
-            <div aria-label="Theme" className="theme-segment" role="group">
-              <Button
-                isIconOnly
-                aria-label="Use light mode"
-                aria-pressed={theme === "light"}
-                className="theme-toggle"
-                data-active={theme === "light"}
-                radius="md"
-                size="sm"
-                variant="light"
-                onPress={() => setTheme("light")}
-              >
-                <SunIcon aria-hidden="true" focusable="false" />
-              </Button>
-              <Button
-                isIconOnly
-                aria-label="Use dark mode"
-                aria-pressed={theme === "dark"}
-                className="theme-toggle"
-                data-active={theme === "dark"}
-                radius="md"
-                size="sm"
-                variant="light"
-                onPress={() => setTheme("dark")}
-              >
-                <MoonIcon aria-hidden="true" focusable="false" />
-              </Button>
-            </div>
+            <ThemeToggle theme={theme} onThemeChange={setTheme} />
           </NavbarItem>
           <NavbarItem className="docs-navbar-clock">
             <CurrentTime className="theme-clock" />
@@ -244,36 +216,12 @@ export default function IndexPage() {
             </a>
           </NavbarMenuItem>
           <NavbarMenuItem>
-            <div
-              aria-label="Theme"
-              className="theme-segment theme-segment-mobile"
-              role="group"
-            >
-              <Button
-                aria-pressed={theme === "light"}
-                className="theme-toggle theme-toggle-labeled"
-                data-active={theme === "light"}
-                radius="md"
-                size="sm"
-                startContent={<SunIcon aria-hidden="true" focusable="false" />}
-                variant="light"
-                onPress={() => setTheme("light")}
-              >
-                Light
-              </Button>
-              <Button
-                aria-pressed={theme === "dark"}
-                className="theme-toggle theme-toggle-labeled"
-                data-active={theme === "dark"}
-                radius="md"
-                size="sm"
-                startContent={<MoonIcon aria-hidden="true" focusable="false" />}
-                variant="light"
-                onPress={() => setTheme("dark")}
-              >
-                Dark
-              </Button>
-            </div>
+            <ThemeToggle
+              labeled
+              className="theme-segment-mobile"
+              theme={theme}
+              onThemeChange={setTheme}
+            />
           </NavbarMenuItem>
         </NavbarMenu>
       </Navbar>
