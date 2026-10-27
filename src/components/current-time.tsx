@@ -38,7 +38,6 @@ export function CurrentTime({ className }: CurrentTimeProps) {
   return (
     <time
       suppressHydrationWarning
-      aria-live="polite"
       className={className}
       dateTime={now.toISOString()}
     >

@@ -32,8 +32,6 @@ export function useThemePreference() {
     resolvePreferredTheme,
   );
 
-  const nextTheme = theme === "light" ? "dark" : "light";
-
   useEffect(() => {
     if (typeof document === "undefined") return;
 
@@ -69,22 +67,15 @@ export function useThemePreference() {
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, [manual]);
 
-  const toggleTheme = () => {
-    setThemeState({ theme: nextTheme, manual: true });
-  };
-
-  const setTheme = (value: ThemeMode, isManual = true) => {
-    setThemeState({ theme: value, manual: isManual });
+  const setTheme = (value: ThemeMode) => {
+    setThemeState({ theme: value, manual: true });
   };
 
   return useMemo(
     () => ({
       theme,
-      manual,
-      nextTheme,
-      toggleTheme,
       setTheme,
     }),
-    [manual, nextTheme, theme],
+    [theme],
   );
 }

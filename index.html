@@ -2,6 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <meta content="dev+unknown" name="x-build" />
     <meta content="viewport-fit=cover, width=device-width, initial-scale=1.0" name="viewport" />
     <title>goodmeow.dev — IT Ops, Monitoring & Networking Notes</title>
@@ -127,6 +133,31 @@
           }
         ]
       }
+    </script>
+    <script>
+      (function () {
+        var stored = null;
+
+        try {
+          stored = window.localStorage.getItem("gm-theme-preference");
+        } catch (error) {
+          stored = null;
+        }
+
+        if (stored !== "light" && stored !== "dark") {
+          stored =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: light)").matches
+              ? "light"
+              : "dark";
+        }
+
+        var root = document.documentElement;
+
+        root.dataset.theme = stored;
+        root.classList.add(stored);
+        root.style.colorScheme = stored;
+      })();
     </script>
   </head>
   <body>

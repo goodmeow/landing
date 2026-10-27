@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint --fix",
+    "test": "vitest run",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -15,16 +16,10 @@
     "@heroui/card": "2.2.25",
     "@heroui/chip": "2.2.22",
     "@heroui/divider": "2.2.20",
-    "@heroui/input": "2.4.28",
-    "@heroui/kbd": "2.2.22",
-    "@heroui/link": "2.2.23",
     "@heroui/navbar": "2.2.25",
-    "@heroui/switch": "2.2.24",
     "@heroui/system": "2.4.23",
     "@heroui/theme": "2.4.23",
-    "@heroui/use-theme": "2.1.10",
     "@heroui/use-viewport-size": "^2.0.1",
-    "@react-aria/visually-hidden": "3.8.28",
     "@react-types/shared": "3.32.1",
     "@tailwindcss/postcss": "4.1.16",
     "@tailwindcss/vite": "4.1.16",
@@ -33,7 +28,6 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-router-dom": "^6.30.3",
-    "tailwind-variants": "3.1.1",
     "tailwindcss": "4.1.16"
   },
   "devDependencies": {
@@ -60,6 +54,7 @@
     "prettier": "3.5.3",
     "typescript": "5.6.3",
     "vite": "^7.3.3",
-    "vite-tsconfig-paths": "5.1.4"
+    "vite-tsconfig-paths": "5.1.4",
+    "vitest": "^3.2.4"
   }
 }
