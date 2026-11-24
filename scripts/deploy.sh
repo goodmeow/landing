@@ -17,7 +17,8 @@ npm run lint
 npm run build
 
 rsync -az --delete -e ssh dist/ "${DEPLOY_HOST}:${DEPLOY_TARGET}/dist/"
+rsync -az --delete -e ssh deploy/nginx/ "${DEPLOY_HOST}:${DEPLOY_TARGET}/deploy/nginx/"
 
-ssh "$DEPLOY_HOST" "cd ${DEPLOY_TARGET} && docker compose -p landing -f deploy/docker-compose.yml up -d"
+ssh "$DEPLOY_HOST" "cd ${DEPLOY_TARGET} && docker compose -p landing -f deploy/docker-compose.yml up -d --force-recreate"
 
 echo "deployed: $(grep -o 'content="[^"]*" name="x-build"' dist/index.html)"

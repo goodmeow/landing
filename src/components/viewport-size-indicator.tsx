@@ -1,8 +1,6 @@
 import { useMemo } from "react";
 import { useViewportSize } from "@heroui/use-viewport-size";
 
-const DEV_ONLY = import.meta.env.DEV;
-
 export function ViewportSizeIndicator() {
   const { width, height } = useViewportSize();
 
@@ -16,10 +14,6 @@ export function ViewportSizeIndicator() {
 
     return `viewport ${roundedWidth} × ${roundedHeight}`;
   }, [width, height]);
-
-  if (!DEV_ONLY) {
-    return null;
-  }
 
   return (
     <span

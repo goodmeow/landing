@@ -85,7 +85,7 @@ export default function IndexPage() {
 
     async function loadPosts() {
       try {
-        const url = new URL(ghostContentUrl || DEFAULT_GHOST_API_URL);
+        const url = new URL(ghostContentUrl);
 
         url.searchParams.set("key", ghostContentKey);
         url.searchParams.set("limit", "3");

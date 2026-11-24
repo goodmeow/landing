@@ -9,14 +9,24 @@ type ThemeState = {
 
 const THEME_STORAGE_KEY = "gm-theme-preference";
 
-function resolvePreferredTheme(): ThemeState {
+function readStoredTheme(): ThemeMode | null {
+  try {
+    const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+
+    return stored === "light" || stored === "dark" ? stored : null;
+  } catch {
+    return null;
+  }
+}
+
+export function resolvePreferredTheme(): ThemeState {
   if (typeof window === "undefined") {
     return { theme: "dark", manual: false };
   }
 
-  const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+  const stored = readStoredTheme();
 
-  if (stored === "light" || stored === "dark") {
+  if (stored) {
     return { theme: stored, manual: true };
   }
 
@@ -43,10 +53,14 @@ export function useThemePreference() {
     root.classList.add(theme);
 
     if (typeof window !== "undefined") {
-      if (manual) {
-        window.localStorage.setItem(THEME_STORAGE_KEY, theme);
-      } else {
-        window.localStorage.removeItem(THEME_STORAGE_KEY);
+      try {
+        if (manual) {
+          window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+        } else {
+          window.localStorage.removeItem(THEME_STORAGE_KEY);
+        }
+      } catch {
+        // Storage can throw in private mode or when site data is blocked.
       }
     }
   }, [theme, manual]);

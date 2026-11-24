@@ -8,7 +8,7 @@ COMPOSE := $(shell docker compose version >/dev/null 2>&1 && echo "docker compos
 .PHONY: frontend-install frontend-build frontend-preview frontend-clean frontend-sync \
         landing-deploy landing-local landing-local-down landing-local-logs landing-local-ps \
         blog-deploy blog-local blog-local-down blog-local-logs blog-local-ps \
-        stack-local stack-local-down stack-local-logs stack-local-ps
+        stack-local stack-local-down stack-local-ps
 
 frontend-install:
 	cd $(FRONTEND_DIR) && npm install
@@ -51,10 +51,6 @@ landing-local-logs:
 	$(COMPOSE) -p $(LANDING_PROJECT) -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml logs -f landing
 
 blog-local-logs:
-	$(COMPOSE) -p $(BLOG_PROJECT) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog logs -f blog blog_db
-
-stack-local-logs:
-	$(COMPOSE) -p $(LANDING_PROJECT) -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml logs -f landing
 	$(COMPOSE) -p $(BLOG_PROJECT) -f deploy/docker-compose.blog.yml --env-file deploy/.env.blog logs -f blog blog_db
 
 landing-local-ps:

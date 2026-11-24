@@ -1,47 +1,9 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
-
-const repoRoot = dirname(fileURLToPath(import.meta.url));
-
-function readGitShaFromDisk() {
-  const gitDir = resolve(repoRoot, ".git");
-  const headPath = resolve(gitDir, "HEAD");
-
-  if (!existsSync(headPath)) return "";
-
-  const head = readFileSync(headPath, "utf8").trim();
-
-  if (/^[0-9a-f]{40}$/i.test(head)) {
-    return head.slice(0, 7);
-  }
-
-  const ref = head.match(/^ref: (.+)$/)?.[1];
-
-  if (!ref) return "";
-
-  const refPath = resolve(gitDir, ref);
-
-  if (existsSync(refPath)) {
-    return readFileSync(refPath, "utf8").trim().slice(0, 7);
-  }
-
-  const packedRefsPath = resolve(gitDir, "packed-refs");
-
-  if (!existsSync(packedRefsPath)) return "";
-
-  const packedRef = readFileSync(packedRefsPath, "utf8")
-    .split("\n")
-    .find((line) => line.endsWith(` ${ref}`));
-
-  return packedRef?.slice(0, 7) ?? "";
-}
 
 function getBuildVersion() {
   if (process.env.VERSION) {
@@ -60,9 +22,7 @@ function getBuildVersion() {
 
     return `${year}.${month}.${day}+${sha}`;
   } catch {
-    const sha = readGitShaFromDisk() || "unknown";
-
-    return `${year}.${month}.${day}+${sha}`;
+    return `${year}.${month}.${day}+unknown`;
   }
 }
 

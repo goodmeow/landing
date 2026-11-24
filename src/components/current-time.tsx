@@ -12,11 +12,6 @@ export type CurrentTimeProps = {
 
 export function CurrentTime({ className }: CurrentTimeProps) {
   const [now, setNow] = useState(() => new Date());
-  const [locale] = useState(() => {
-    if (typeof navigator === "undefined") return undefined;
-
-    return navigator.languages?.[0] ?? navigator.language;
-  });
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -29,8 +24,8 @@ export function CurrentTime({ className }: CurrentTimeProps) {
   }, []);
 
   const formatter = useMemo(
-    () => new Intl.DateTimeFormat(locale, timeFormatOptions),
-    [locale],
+    () => new Intl.DateTimeFormat(undefined, timeFormatOptions),
+    [],
   );
 
   const formatted = useMemo(() => formatter.format(now), [formatter, now]);
