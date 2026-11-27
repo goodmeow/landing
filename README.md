@@ -42,7 +42,7 @@ The Makefile uses separate Compose project names for landing and blog so each st
 - Deploy from a machine that has Node: `DEPLOY_HOST=<ssh-alias> ./scripts/deploy.sh`. It refuses a dirty tree, runs tests/lint/build, rsyncs `dist/` and recreates the container.
 - The Docker/nginx manifests live under `deploy/`; use `make landing-deploy` for the static landing container and `make blog-deploy` for Ghost + MySQL.
 - Vite stamps `dist/index.html` with `YYYY.MM.DD+<shortSHA>` during `npm run build` so the footer shows the current deploy without dirtying source files.
-- `deploy/nginx/goodmeow.conf` is a copy of the public vhost that actually runs in the `nginx-proxy` container (source: `/home/ubuntu/rev-prox/nginx/conf.d/goodmeow.conf`). Edit the live file, then mirror the change here.
+- `deploy/nginx/goodmeow.conf` was the legacy Nginx vhost; the live reverse proxy now runs in `caddy-proxy` at `/home/ubuntu/rev-prox/caddy/conf.d/goodmeow.caddy`.
 
 ## Backups
 - Blog data lives outside the checkout in `/home/ubuntu/blog_data` (`blog_mysql`, `blog_content`).
